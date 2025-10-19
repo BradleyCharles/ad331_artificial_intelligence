@@ -1,15 +1,19 @@
 # AD331 Artificial Intelligence Course Platform
 
+# Created by Bradley Charles
+
 A comprehensive learning platform for AI, Machine Learning, and Deep Learning with Next.js frontend and FastAPI backend.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js (v18 or higher)
 - Python (v3.8 or higher)
 - npm or yarn
 
 ### Option 1: Start Both Servers (Recommended)
+
 ```bash
 # Cross-platform Python script (works on all systems)
 python start_all.py
@@ -27,6 +31,7 @@ This will start both the frontend and backend simultaneously!
 ### Option 2: Start Servers Separately
 
 #### Frontend Setup (Next.js)
+
 ```bash
 # Install dependencies
 npm install
@@ -38,6 +43,7 @@ npm run dev
 The frontend will be available at `http://localhost:3000`
 
 #### Backend Setup (FastAPI)
+
 ```bash
 # Install Python dependencies
 pip install -r backend/requirements.txt
@@ -48,21 +54,23 @@ python start_backend.py
 
 The backend API will be available at `http://localhost:8000`
 
-
 ## 🛠️ Technology Stack
 
 ### Frontend
+
 - **Next.js 15** - React framework
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Styling
 - **Responsive Design** - Mobile-first approach
 
 ### Backend
+
 - **FastAPI** - Modern Python web framework
 - **Pydantic** - Data validation
 - **Uvicorn** - ASGI server
 
 ### Python Libraries
+
 - **NumPy** - Numerical computing
 - **Pandas** - Data manipulation
 - **Scikit-learn** - Machine learning
@@ -111,16 +119,19 @@ ad331_artificial_intelligence/
 ## 🔧 Development
 
 ### Adding New Assignments
+
 1. Create Python files in the appropriate week folder under `assignments/`
 2. Update the FastAPI backend in `backend/main.py` if needed
 3. The frontend will automatically display new assignments
 
 ### Customizing the Backend
+
 - Modify `backend/main.py` to add new API endpoints
 - Update `backend/requirements.txt` to add new Python dependencies
 - Restart the backend server to apply changes
 
 ### Styling the Frontend
+
 - Modify components in `src/app/` directory
 - Use Tailwind CSS classes for styling
 - The design is fully responsive and supports dark mode
@@ -128,6 +139,7 @@ ad331_artificial_intelligence/
 ## 📝 Assignment Guidelines
 
 Each week contains:
+
 - **README.md** - Assignment descriptions and requirements
 - **Python Files** - Implementation code
 - **Jupyter Notebooks** - Interactive exercises
@@ -136,12 +148,14 @@ Each week contains:
 ## 🚀 Deployment
 
 ### Frontend (Vercel)
+
 ```bash
 npm run build
 # Deploy to Vercel or your preferred platform
 ```
 
 ### Backend (Python)
+
 ```bash
 # Install dependencies
 pip install -r backend/requirements.txt
@@ -153,6 +167,7 @@ uvicorn backend.main:app --host 0.0.0.0 --port 8000
 ## 📞 Support
 
 For questions or issues:
+
 1. Check the assignment README files
 2. Review the Python code examples
 3. Consult the FastAPI and Next.js documentation
