@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Home() {
   const weeks = [
     { number: 1, title: "Development Environment Setup and Data Exploration", description: "The goal of this assignment is to establish a functional development environment for Machine Learning, demonstrate proficiency with essential Python libraries, and apply basic data exploration and visualization techniques to understand a real-world dataset." },
-    { number: 2, title: "", description: "" },
+    { number: 2, title: "Linear Regression, Data Cleaning, and Feature Engineering", description: "The goal of this assignment is to apply the principles of the ML lifecycle by selecting a real-world dataset, implementing necessary data cleaning and feature engineering steps, and training a simple Linear Regression model to predict a continuous target variable." },
     { number: 3, title: "", description: "" },
     { number: 4, title: "", description: "" },
     { number: 5, title: "", description: "" },
