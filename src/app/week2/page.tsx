@@ -295,6 +295,101 @@ export default function Week2() {
           </div>
         </div>
 
+        {/* New Feature: Failed Logins Analysis */}
+        <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+            <svg className="w-6 h-6 mr-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            🔥 NEW: Failed Login Security Analysis
+          </h2>
+          
+          <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900 dark:to-orange-900 rounded-lg p-6 mb-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
+                  Security Threat Patterns by Hour of Day
+                </h3>
+                <p className="text-red-700 dark:text-red-300 mb-4">
+                  Advanced analysis revealing when security threats are most likely to occur, 
+                  helping optimize security monitoring and resource allocation.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3">
+                    <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Peak Risk Hour</div>
+                    <div className="text-lg font-bold text-red-600 dark:text-red-400">09:00</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">3.6 avg failed logins</div>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3">
+                    <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Failed Logins</div>
+                    <div className="text-lg font-bold text-orange-600 dark:text-orange-400">3,013</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">Across 1,000 incidents</div>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3">
+                    <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Risk Difference</div>
+                    <div className="text-lg font-bold text-purple-600 dark:text-purple-400">1.3x</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">Peak vs lowest risk</div>
+                  </div>
+                </div>
+              </div>
+              <div className="ml-6">
+                <Link 
+                  href="/week2/failed-logins"
+                  className="bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg transition-colors inline-block"
+                >
+                  View Analysis →
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-semibold text-gray-800 dark:text-white mb-3">Key Insights</h4>
+              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li className="flex items-start">
+                  <span className="text-red-500 mr-2">•</span>
+                  <span>Peak risk at 09:00 with 3.6 average failed logins per incident</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-orange-500 mr-2">•</span>
+                  <span>Consistent medium-risk pattern across all 24 hours</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">•</span>
+                  <span>Total of 3,013 failed logins analyzed across 1,000 incidents</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">•</span>
+                  <span>Lowest risk period at 19:00 (2.4 avg failed logins)</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-gray-800 dark:text-white mb-3">Security Benefits</h4>
+              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li className="flex items-start">
+                  <span className="text-purple-500 mr-2">✓</span>
+                  <span>Enhanced monitoring during high-risk periods</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-purple-500 mr-2">✓</span>
+                  <span>Optimized security team scheduling</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-purple-500 mr-2">✓</span>
+                  <span>Real-time threat detection improvements</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-purple-500 mr-2">✓</span>
+                  <span>Data-driven security resource allocation</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         {/* AI Model Recommendations */}
         <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
