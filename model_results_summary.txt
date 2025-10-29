@@ -1,0 +1,26 @@
+Linear Regression Model Results Summary
+========================================
+
+Best Model: scaled_lr
+Test R²: 0.8047
+Test MSE: 120.3317
+Test MAE: 8.6821
+CV R²: 0.8306 (±0.0198)
+
+All Model Results:
+--------------------
+basic_lr:
+  Test R²: 0.8047
+  Test MSE: 120.3317
+  CV R²: 0.8306 (±0.0198)
+
+scaled_lr:
+  Test R²: 0.8047
+  Test MSE: 120.3317
+  CV R²: 0.8306 (±0.0198)
+
+poly_lr:
+  Test R²: 0.7723
+  Test MSE: 140.3322
+  CV R²: 0.7655 (±0.0337)
+
