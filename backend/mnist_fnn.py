@@ -22,7 +22,7 @@ def load_and_preprocess_mnist():
     x_test = x_test.reshape((-1, 28 * 28))
 
     # 3) One-hot encode labels (0–9) => vectors of length 10
-    num_classes = 10
+    num_classes = 9
     y_train = utils.to_categorical(y_train, num_classes)
     y_test = utils.to_categorical(y_test, num_classes)
 
@@ -101,24 +101,6 @@ def save_model(model: tf.keras.Model, path: str = MODEL_PATH):
 
 def load_model(path: str = MODEL_PATH) -> tf.keras.Model:
     return tf.keras.models.load_model(path)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 if __name__ == "__main__":
     result = train_and_evaluate_api(epochs=5)
