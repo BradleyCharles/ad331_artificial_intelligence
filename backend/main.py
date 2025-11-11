@@ -24,14 +24,14 @@ app.add_middleware(
 
 # Pydantic models
 class Assignment(BaseModel):
-    week: int
+    assignment_number: int
     title: str
     description: str
     status: str = "pending"  # pending, in_progress, completed
     files: List[str] = []
 
-class Week(BaseModel):
-    week_number: int
+class AssignmentModule(BaseModel):
+    assignment_number: int
     title: str
     description: str
     assignments: List[Assignment] = []
@@ -72,7 +72,7 @@ class PredictResponse(BaseModel):
 
 
 # --- Data ---
-weeks_data: dict = {}  # Placeholder for weeks data
+assignment_modules: dict = {}  # Placeholder for assignment module data
 
 # --- Endpoints ---
 
@@ -80,31 +80,31 @@ weeks_data: dict = {}  # Placeholder for weeks data
 async def root():
     return {"message": "AD331 AI Course Backend API"}
 
-@app.get("/weeks")
-async def get_weeks():
-    return list(weeks_data.values())
+@app.get("/assignment-modules")
+async def get_assignment_modules():
+    return list(assignment_modules.values())
 
-@app.get("/weeks/{week_number}")
-async def get_week(week_number: int):
-    if week_number not in weeks_data:
-        raise HTTPException(status_code=404, detail="Week not found")
-    return weeks_data[week_number]
+@app.get("/assignment-modules/{assignment_number}")
+async def get_assignment_module(assignment_number: int):
+    if assignment_number not in assignment_modules:
+        raise HTTPException(status_code=404, detail="Assignment module not found")
+    return assignment_modules[assignment_number]
 
-@app.get("/assignments/{week_number}")
-async def get_assignments(week_number: int):
-    if week_number not in weeks_data:
-        raise HTTPException(status_code=404, detail="Week not found")
-    return weeks_data[week_number].assignments
+@app.get("/assignment-modules/{assignment_number}/assignments")
+async def get_module_assignments(assignment_number: int):
+    if assignment_number not in assignment_modules:
+        raise HTTPException(status_code=404, detail="Assignment module not found")
+    return assignment_modules[assignment_number].assignments
 
-@app.put("/assignments/{week_number}/{assignment_id}")
-async def update_assignment(week_number: int, assignment_id: int, assignment: Assignment):
-    if week_number not in weeks_data:
-        raise HTTPException(status_code=404, detail="Week not found")
+@app.put("/assignment-modules/{assignment_number}/assignments/{assignment_id}")
+async def update_module_assignment(assignment_number: int, assignment_id: int, assignment: Assignment):
+    if assignment_number not in assignment_modules:
+        raise HTTPException(status_code=404, detail="Assignment module not found")
     
-    if assignment_id >= len(weeks_data[week_number].assignments):
+    if assignment_id >= len(assignment_modules[assignment_number].assignments):
         raise HTTPException(status_code=404, detail="Assignment not found")
     
-    weeks_data[week_number].assignments[assignment_id] = assignment
+    assignment_modules[assignment_number].assignments[assignment_id] = assignment
     return {"message": "Assignment updated successfully"}
 
 
@@ -131,10 +131,10 @@ def predict_mnist(req: PredictRequest):
     result = predict_digit(arr)
     return result
 
-@app.post("/api/week4/generate", response_model=LLMGenerateResponse)
+@app.post("/api/assignment4/generate", response_model=LLMGenerateResponse)
 def generate_llm_text(req: LLMGenerateRequest):
     """
-    Week 4: LLM text generation endpoint.
+    Assignment 4: LLM text generation endpoint.
 
     Wraps the Hugging Face GPT-2 model and exposes key generation parameters.
     """
@@ -171,10 +171,10 @@ class TestCaseExperimentResponse(BaseModel):
     results: List[TestCaseResult]
 
 
-@app.post("/api/week4/test-cases", response_model=List[TestCaseExperimentResponse])
+@app.post("/api/assignment4/test-cases", response_model=List[TestCaseExperimentResponse])
 def run_test_cases():
     """
-    Week 4: Run all test case experiments (Temperature, Top-P, Max New Tokens).
+    Assignment 4: Run all test case experiments (Temperature, Top-P, Max New Tokens).
     """
     experiments = []
     

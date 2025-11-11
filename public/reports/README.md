@@ -85,9 +85,9 @@ The backend API will be available at `http://localhost:8000`
 ad331_artificial_intelligence/
 ├── src/app/                    # Next.js frontend
 │   ├── page.tsx               # Landing page
-│   ├── week1/                 # Week 1 assignments
-│   ├── week2/                 # Week 2 assignments
-│   └── ...                    # Week 3-10
+│   ├── assignment1/           # Assignment 1 experience
+│   ├── assignment2/           # Assignment 2 experience
+│   └── ...                    # Assignment 3-10
 ├── backend/                   # FastAPI backend
 │   ├── main.py               # FastAPI application
 │   └── requirements.txt      # Python dependencies
@@ -113,14 +113,14 @@ ad331_artificial_intelligence/
 1. **Start the Frontend**: Run `npm run dev` to start the Next.js development server
 2. **Start the Backend**: Run `python start_backend.py` to start the FastAPI server
 3. **Access the Platform**: Open `http://localhost:3000` in your browser
-4. **Navigate Assignments**: Click on any week to view assignments and resources
+4. **Navigate Assignments**: Click on any assignment to view resources
 5. **Work on Python Code**: Access assignment files in the `assignments/` directory
 
 ## 🔧 Development
 
 ### Adding New Assignments
 
-1. Create Python files in the appropriate week folder under `assignments/`
+1. Create Python files in the appropriate assignment folder under `assignments/`
 2. Update the FastAPI backend in `backend/main.py` if needed
 3. The frontend will automatically display new assignments
 

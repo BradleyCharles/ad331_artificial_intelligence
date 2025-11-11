@@ -77,7 +77,7 @@ def main():
                 print(f"\n📊 Summary: {success_count}/{len(scripts)} scripts completed successfully")
                 
                 if success_count == len(scripts):
-                    print("🎉 All scripts completed! Check the web interface at /week2")
+                    print("🎉 All scripts completed! Check the web interface at /assignment2")
                 else:
                     print("⚠️  Some scripts failed. Check the error messages above.")
             else:

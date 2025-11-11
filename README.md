@@ -117,7 +117,7 @@ python3 scripts/utilities/view_plots.py
 ## 🌐 Web Interface
 
 ### Main Dashboard
-- **Route**: `/week2`
+- **Route**: `/assignment2`
 - **Features**:
   - Dataset overview and statistics
   - Model performance metrics
@@ -125,10 +125,10 @@ python3 scripts/utilities/view_plots.py
   - Links to all visualizations
 
 ### Interactive Visualizations
-- **Scatter Matrix** (`/week2/scatter-matrix`): Feature relationships
-- **3D Scatter Plot** (`/week2/3d-scatter`): 3D feature visualization
-- **Correlation Heatmap** (`/week2/correlation`): Feature correlations
-- **Failed Logins Analysis** (`/week2/failed-logins`): Failed login patterns
+- **Scatter Matrix** (`/assignment2/scatter-matrix`): Feature relationships
+- **3D Scatter Plot** (`/assignment2/3d-scatter`): 3D feature visualization
+- **Correlation Heatmap** (`/assignment2/correlation`): Feature correlations
+- **Failed Logins Analysis** (`/assignment2/failed-logins`): Failed login patterns
 
 ## 📁 Project Structure
 
@@ -147,13 +147,13 @@ ad331_artificial_intelligence/
 │   ├── utilities/             # Helper scripts
 │   └── README.md             # Script documentation
 ├── src/app/                    # Next.js frontend
-│   ├── week2/                # Week 2 dashboard
+│   ├── assignment2/          # Assignment 2 dashboard
 │   │   ├── page.tsx          # Main dashboard
 │   │   ├── scatter-matrix/   # Interactive scatter matrix
 │   │   ├── 3d-scatter/       # 3D scatter plot
 │   │   ├── correlation/      # Correlation heatmap
 │   │   └── failed-logins/    # Failed logins analysis
-│   └── ...                   # Other week pages
+│   └── ...                   # Other assignment pages
 ├── public/                     # Generated files
 │   ├── models/               # Trained ML models
 │   ├── reports/              # Analysis reports

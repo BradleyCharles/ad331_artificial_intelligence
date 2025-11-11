@@ -68,7 +68,7 @@ python3 view_plots.py
 ```
 
 ### View in Web Interface
-Navigate to `/week2` in your Next.js application to see the comprehensive analysis dashboard.
+Navigate to `/assignment2` in your Next.js application to see the comprehensive analysis dashboard.
 
 ## Next Steps
 1. Review the generated visualizations

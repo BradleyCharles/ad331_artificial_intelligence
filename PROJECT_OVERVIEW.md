@@ -24,7 +24,7 @@ ad331_artificial_intelligence/
 │   └── visualizations/           # All plots and charts
 │       ├── static/              # PNG visualizations
 │       └── interactive/         # HTML interactive plots
-├── 📁 src/app/week2/             # Web interface
+├── 📁 src/app/assignment2/       # Web interface
 │   ├── page.tsx                 # Main dashboard
 │   ├── scatter-matrix/          # Interactive scatter matrix
 │   ├── 3d-scatter/              # 3D scatter plot
@@ -52,7 +52,7 @@ Interactive menu to run all scripts in sequence.
 Starts both the Next.js frontend and Python backend.
 
 ### 3. Access Web Dashboard
-Navigate to `http://localhost:3000/week2` for the full dashboard.
+Navigate to `http://localhost:3000/assignment2` for the full dashboard.
 
 ## 📋 Individual Scripts
 
@@ -88,16 +88,16 @@ python3 scripts/utilities/view_plots.py         # View generated plots
 
 ## 🌐 Web Interface Features
 
-### Main Dashboard (`/week2`)
+### Main Dashboard (`/assignment2`)
 - Dataset overview and statistics
 - Model performance metrics
 - Feature analysis results
 - Links to all visualizations
 
 ### Interactive Visualizations
-- **Scatter Matrix** (`/week2/scatter-matrix`) - Feature relationships
-- **3D Scatter Plot** (`/week2/3d-scatter`) - 3D feature visualization
-- **Correlation Heatmap** (`/week2/correlation`) - Feature correlations
+- **Scatter Matrix** (`/assignment2/scatter-matrix`) - Feature relationships
+- **3D Scatter Plot** (`/assignment2/3d-scatter`) - 3D feature visualization
+- **Correlation Heatmap** (`/assignment2/correlation`) - Feature correlations
 
 ## 📊 Generated Outputs
 

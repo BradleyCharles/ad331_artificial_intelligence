@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export default function Home() {
-  const weeks = [
+  const assignments = [
     { number: 1, title: "Development Environment Setup and Data Exploration", description: "The goal of this assignment is to establish a functional development environment for Machine Learning, demonstrate proficiency with essential Python libraries, and apply basic data exploration and visualization techniques to understand a real-world dataset." },
     { number: 2, title: "Linear Regression, Data Cleaning, and Feature Engineering", description: "The goal of this assignment is to apply the principles of the ML lifecycle by selecting a real-world dataset, implementing necessary data cleaning and feature engineering steps, and training a simple Linear Regression model to predict a continuous target variable." },
     { number: 3, title: "Building a Simple Neural Network for Classification", description: "The goal of this assignment is to introduce the foundational concepts of Deep Learning by having you build, train, and evaluate a simple Feedforward Neural Network (FNN) using a major deep learning framework (TensorFlow/Keras, PyTorch or scikit-learn)." },
@@ -30,28 +30,28 @@ export default function Home() {
           <h3 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">Assignments</h3>
         </div>
 
-        {/* Weeks Grid */}
+        {/* Assignments Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-          {weeks.map((week) => (
+          {assignments.map((assignment) => (
             <Link
-              key={week.number}
-              href={`/week${week.number}`}
+              key={assignment.number}
+              href={`/assignment${assignment.number}`}
               className="group bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-200 dark:border-gray-600"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    Week {week.number}
+                    Assignment {assignment.number}
                   </span>
                 </div>
                 <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {week.title}
+                  {assignment.title}
                 </h4>
                 <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3">
-                  {week.description}
+                  {assignment.description}
                 </p>
                 <div className="mt-4 flex items-center text-blue-600 dark:text-blue-400 text-sm font-medium">
-                  View Assignments
+                  View Details
                   <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
