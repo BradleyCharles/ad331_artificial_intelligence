@@ -102,6 +102,24 @@ def save_model(model: tf.keras.Model, path: str = MODEL_PATH):
 def load_model(path: str = MODEL_PATH) -> tf.keras.Model:
     return tf.keras.models.load_model(path)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     result = train_and_evaluate_api(epochs=5)
     print("Test accuracy:", result["test_accuracy"])
