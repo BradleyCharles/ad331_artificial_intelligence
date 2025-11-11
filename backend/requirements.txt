@@ -20,8 +20,6 @@ torchvision==0.24.0
 jupyter==1.1.1
 notebook==7.2.2
 
-# Hugging Face Transformers stack
+
+accelerate==0.34.2
 transformers==4.46.1
-accelerate==0.34.2        # Optimized execution for large models
-safetensors==0.4.5        # Fast model weight loading (used by newer checkpoints)
-sentencepiece==0.2.0      # Needed for tokenizers like T5/LLaMA

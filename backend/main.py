@@ -6,6 +6,10 @@ import numpy as np
 from mnist_fnn import train_and_evaluate_api, predict_digit
 from typing import List, Optional
 import os
+from pydantic import BaseModel, Field
+
+from llm_model import generate_text
+
 
 app = FastAPI(title="AD331 AI Course Backend", version="1.0.0")
 
@@ -32,7 +36,45 @@ class Week(BaseModel):
     description: str
     assignments: List[Assignment] = []
 
-#
+class LLMGenerateRequest(BaseModel):
+    prompt: str = Field(..., description="Input text prompt for the LLM.")
+    max_new_tokens: int = Field(100, ge=1, le=512)
+    temperature: float = Field(0.7, gt=0.0, le=2.0)
+    top_p: float = Field(0.9, gt=0.0, le=1.0)
+
+
+class LLMGenerateResponse(BaseModel):
+    prompt: str
+    generated_text: str
+    max_new_tokens: int
+    temperature: float
+    top_p: float
+
+# --- Request / response models ---
+
+class TrainRequest(BaseModel):
+    epochs: int = 5
+    batch_size: int = 128
+    hidden_units: int = 128
+
+class TrainResponse(BaseModel):
+    history: dict
+    test_loss: float
+    test_accuracy: float
+
+class PredictRequest(BaseModel):
+    # 28 x 28 list of lists sent from frontend
+    image: list[list[float]]
+
+class PredictResponse(BaseModel):
+    predicted_class: int
+    probabilities: list[float]
+
+
+# --- Data ---
+weeks_data: dict = {}  # Placeholder for weeks data
+
+# --- Endpoints ---
 
 @app.get("/")
 async def root():
@@ -66,29 +108,6 @@ async def update_assignment(week_number: int, assignment_id: int, assignment: As
     return {"message": "Assignment updated successfully"}
 
 
-# --- Request / response models ---
-
-class TrainRequest(BaseModel):
-    epochs: int = 5
-    batch_size: int = 128
-    hidden_units: int = 128
-
-class TrainResponse(BaseModel):
-    history: dict
-    test_loss: float
-    test_accuracy: float
-
-class PredictRequest(BaseModel):
-    # 28 x 28 list of lists sent from frontend
-    image: list[list[float]]
-
-class PredictResponse(BaseModel):
-    predicted_class: int
-    probabilities: list[float]
-
-
-# --- Endpoints ---
-
 @app.post("/mnist/train", response_model=TrainResponse)
 def train_mnist(req: TrainRequest):
     result = train_and_evaluate_api(
@@ -112,18 +131,152 @@ def predict_mnist(req: PredictRequest):
     result = predict_digit(arr)
     return result
 
+@app.post("/api/week4/generate", response_model=LLMGenerateResponse)
+def generate_llm_text(req: LLMGenerateRequest):
+    """
+    Week 4: LLM text generation endpoint.
+
+    Wraps the Hugging Face GPT-2 model and exposes key generation parameters.
+    """
+    try:
+        text = generate_text(
+            prompt=req.prompt,
+            max_new_tokens=req.max_new_tokens,
+            temperature=req.temperature,
+            top_p=req.top_p,
+            do_sample=True,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    return LLMGenerateResponse(
+        prompt=req.prompt,
+        generated_text=text,
+        max_new_tokens=req.max_new_tokens,
+        temperature=req.temperature,
+        top_p=req.top_p,
+    )
 
 
+class TestCaseResult(BaseModel):
+    parameter_name: str
+    parameter_value: float | int
+    prompt: str
+    generated_text: str
 
 
+class TestCaseExperimentResponse(BaseModel):
+    experiment_name: str
+    prompt: str
+    results: List[TestCaseResult]
 
 
-
-
-
-
-
-
+@app.post("/api/week4/test-cases", response_model=List[TestCaseExperimentResponse])
+def run_test_cases():
+    """
+    Week 4: Run all test case experiments (Temperature, Top-P, Max New Tokens).
+    """
+    experiments = []
+    
+    # Temperature Experiment
+    temp_prompt = (
+        "Write the opening paragraph of a fantasy story about a student "
+        "who learns magic from an ancient, sentient library."
+    )
+    temp_results = []
+    for temp in [0.2, 0.7, 1.2]:
+        try:
+            text = generate_text(
+                prompt=temp_prompt,
+                max_new_tokens=120,
+                temperature=temp,
+                top_p=0.9,
+                do_sample=True,
+            )
+            temp_results.append(TestCaseResult(
+                parameter_name="temperature",
+                parameter_value=temp,
+                prompt=temp_prompt,
+                generated_text=text
+            ))
+        except Exception as e:
+            temp_results.append(TestCaseResult(
+                parameter_name="temperature",
+                parameter_value=temp,
+                prompt=temp_prompt,
+                generated_text=f"Error: {str(e)}"
+            ))
+    experiments.append(TestCaseExperimentResponse(
+        experiment_name="Temperature Experiment",
+        prompt=temp_prompt,
+        results=temp_results
+    ))
+    
+    # Top-P Experiment
+    top_p_prompt = (
+        "Explain in simple terms how a neural network learns to recognize handwritten digits."
+    )
+    top_p_results = []
+    for top_p in [0.5, 0.9, 1.0]:
+        try:
+            text = generate_text(
+                prompt=top_p_prompt,
+                max_new_tokens=120,
+                temperature=0.7,
+                top_p=top_p,
+                do_sample=True,
+            )
+            top_p_results.append(TestCaseResult(
+                parameter_name="top_p",
+                parameter_value=top_p,
+                prompt=top_p_prompt,
+                generated_text=text
+            ))
+        except Exception as e:
+            top_p_results.append(TestCaseResult(
+                parameter_name="top_p",
+                parameter_value=top_p,
+                prompt=top_p_prompt,
+                generated_text=f"Error: {str(e)}"
+            ))
+    experiments.append(TestCaseExperimentResponse(
+        experiment_name="Top-P (Nucleus Sampling) Experiment",
+        prompt=top_p_prompt,
+        results=top_p_results
+    ))
+    
+    # Max New Tokens Experiment
+    length_prompt = "Summarize the rules of Dungeons & Dragons combat in a few sentences."
+    length_results = []
+    for length in [40, 100, 200]:
+        try:
+            text = generate_text(
+                prompt=length_prompt,
+                max_new_tokens=length,
+                temperature=0.7,
+                top_p=0.9,
+                do_sample=True,
+            )
+            length_results.append(TestCaseResult(
+                parameter_name="max_new_tokens",
+                parameter_value=length,
+                prompt=length_prompt,
+                generated_text=text
+            ))
+        except Exception as e:
+            length_results.append(TestCaseResult(
+                parameter_name="max_new_tokens",
+                parameter_value=length,
+                prompt=length_prompt,
+                generated_text=f"Error: {str(e)}"
+            ))
+    experiments.append(TestCaseExperimentResponse(
+        experiment_name="Max New Tokens Experiment",
+        prompt=length_prompt,
+        results=length_results
+    ))
+    
+    return experiments
 
 
 if __name__ == "__main__":
