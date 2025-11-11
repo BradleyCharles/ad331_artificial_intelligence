@@ -30,28 +30,32 @@ model.eval()
 
 def generate_text(
     prompt: str,
-    max_new_tokens: int = 100,
-    temperature: float = 0.7,
+    max_new_tokens: int = 60,   # lower default
+    temperature: float = 0.4,   # safer default
     top_p: float = 0.9,
     do_sample: bool = True,
-    repetition_penalty: float = 1.0,
+    repetition_penalty: float = 1.05,
 ) -> str:
-    """
-    Generate a response from TinyLlama-1.1B-Chat.
-
-    We treat `prompt` as an instruction-style input and let the model
-    "complete" it. Parameters match your FastAPI endpoint and experiment script.
-    """
-
     if not prompt:
         raise ValueError("Prompt must not be empty.")
 
-    # Use the prompt directly without prepending system message
-    # This allows for more natural conversations
-    clean_prompt = prompt.strip()
+    system_instruction = (
+        "You are a helpful, honest AI assistant. "
+        "Answer the user's request in clear, normal prose. "
+        "If you are not sure about specific details (such as product features, "
+        "release dates, or exact technical specs), say that you are not sure "
+        "instead of inventing them. "
+        "Do NOT write in screenplay, script, or fiction format unless the user asks."
+    )
 
-    inputs = tokenizer(clean_prompt, return_tensors="pt").to(DEVICE)
-    input_length = inputs.input_ids.shape[1]
+    full_prompt = (
+        system_instruction
+        + "\n\nUser:\n"
+        + prompt.strip()
+        + "\n\nAssistant:"
+    )
+
+    inputs = tokenizer(full_prompt, return_tensors="pt").to(DEVICE)
 
     with torch.no_grad():
         output_ids = model.generate(
@@ -64,8 +68,12 @@ def generate_text(
             pad_token_id=tokenizer.pad_token_id,
         )
 
-    # Decode only the newly generated tokens (exclude the input prompt)
-    generated_ids = output_ids[0][input_length:]
-    generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
+    full_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
 
-    return generated_text.strip()
+    # Keep only the assistant part if possible
+    if "Assistant:" in full_text:
+        full_text = full_text.split("Assistant:", 1)[1]
+
+    return full_text.strip()
+
+

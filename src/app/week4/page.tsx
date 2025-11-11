@@ -1,6 +1,5 @@
 import Link from "next/link";
 import TestCases from "./TestCases";
-import Chatbot from "./Chatbot";
 
 export default function Week4() {
   return (
@@ -109,9 +108,24 @@ export default function Week4() {
           <TestCases />
         </div>
 
-        {/* Chatbot Section */}
+        {/* Chatbot CTA */}
         <div className="mb-8">
-          <Chatbot />
+          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+                Ready to chat with the model?
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Launch the interactive chatbot to experiment with TinyLlama responses in real time.
+              </p>
+            </div>
+            <Link
+              href="/week4/chatbot"
+              className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+            >
+              Open Chatbot ↗
+            </Link>
+          </div>
         </div>
 
         {/* Analysis Section */}
