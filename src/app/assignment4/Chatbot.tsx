@@ -144,7 +144,7 @@ export default function Chatbot() {
             </label>
             <input
               type="range"
-              min="50"
+              min="10"
               max="300"
               step="10"
               value={maxTokens}

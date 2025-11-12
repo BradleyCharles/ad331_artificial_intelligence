@@ -40,20 +40,17 @@ def generate_text(
         raise ValueError("Prompt must not be empty.")
 
     system_instruction = (
-        "You are a helpful, honest AI assistant. "
-        "Answer the user's request in clear, normal prose. "
-        "If you are not sure about specific details (such as product features, "
-        "release dates, or exact technical specs), say that you are not sure "
-        "instead of inventing them. "
-        "Do NOT write in screenplay, script, or fiction format unless the user asks."
+        "You are a helpful, knowledgeable AI assistant. "
+        "Answer the following question clearly and concisely in normal prose."
     )
 
     full_prompt = (
         system_instruction
-        + "\n\nUser:\n"
+        + "\n\nQuestion:\n"
         + prompt.strip()
-        + "\n\nAssistant:"
+        + "\n\nAnswer:"
     )
+
 
     inputs = tokenizer(full_prompt, return_tensors="pt").to(DEVICE)
 
@@ -70,10 +67,10 @@ def generate_text(
 
     full_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
 
-    # Keep only the assistant part if possible
-    if "Assistant:" in full_text:
-        full_text = full_text.split("Assistant:", 1)[1]
+    if "Answer:" in full_text:
+        full_text = full_text.split("Answer:", 1)[1]
 
     return full_text.strip()
+
 
 
