@@ -162,7 +162,7 @@ export default function Chatbot() {
             <input
               type="range"
               min="10"
-              max="3000"
+              max="300"
               step="10"
               value={maxTokens}
               onChange={(e) => setMaxTokens(parseInt(e.target.value))}
