@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import numpy as np
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import tensorflow as tf
 
@@ -22,7 +21,7 @@ def load_and_preprocess_mnist():
     x_test = x_test.reshape((-1, 28 * 28))
 
     # 3) One-hot encode labels (0–9) => vectors of length 10
-    num_classes = 9
+    num_classes = 10
     y_train = utils.to_categorical(y_train, num_classes)
     y_test = utils.to_categorical(y_test, num_classes)
 

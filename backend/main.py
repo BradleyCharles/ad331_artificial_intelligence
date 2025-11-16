@@ -38,7 +38,7 @@ class AssignmentModule(BaseModel):
 
 class LLMGenerateRequest(BaseModel):
     prompt: str = Field(..., description="Input text prompt for the LLM.")
-    max_new_tokens: int = Field(100, ge=1, le=512)
+    max_new_tokens: int = Field(100, ge=1, le=3000)
     temperature: float = Field(0.7, gt=0.0, le=2.0)
     top_p: float = Field(0.9, gt=0.0, le=1.0)
 

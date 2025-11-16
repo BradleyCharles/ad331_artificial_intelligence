@@ -2,11 +2,31 @@
 
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
+import os
+import sys
+
+print("[llm_model] sys.executable:", sys.executable)
+print("[llm_model] CUDA_VISIBLE_DEVICES:",
+      os.environ.get("CUDA_VISIBLE_DEVICES"))
+print("[llm_model] torch version:", torch.__version__)
+print("[llm_model] torch.version.cuda:", torch.version.cuda)
+print("[llm_model] torch.cuda.is_available():", torch.cuda.is_available())
+
 
 # Small but modern chat model
 MODEL_NAME = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+if torch.cuda.is_available():
+    DEVICE = "cuda"
+    MODEL_KWARGS = {"torch_dtype": torch.float16}
+elif getattr(torch.backends, "mps", None) and torch.backends.mps.is_available():
+    DEVICE = "mps"
+    MODEL_KWARGS = {"torch_dtype": torch.float16}
+else:
+    DEVICE = "cpu"
+    MODEL_KWARGS = {}
+
+print(f"[llm_model] Using device: {DEVICE}")
 
 # Use fast tokenizer (no sentencepiece python package needed)
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=True)
@@ -17,13 +37,8 @@ if tokenizer.pad_token is None:
 
 # Load the model in standard precision
 # If you have GPU, you can use float16; otherwise default dtype is fine.
-if DEVICE == "cuda":
-    model = AutoModelForCausalLM.from_pretrained(
-        MODEL_NAME,
-        torch_dtype=torch.float16,
-    ).to(DEVICE)
-else:
-    model = AutoModelForCausalLM.from_pretrained(MODEL_NAME).to(DEVICE)
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_NAME, **MODEL_KWARGS).to(DEVICE)
 
 model.eval()
 
@@ -51,7 +66,6 @@ def generate_text(
         + "\n\nAnswer:"
     )
 
-
     inputs = tokenizer(full_prompt, return_tensors="pt").to(DEVICE)
 
     with torch.no_grad():
@@ -71,6 +85,3 @@ def generate_text(
         full_text = full_text.split("Answer:", 1)[1]
 
     return full_text.strip()
-
-
-
