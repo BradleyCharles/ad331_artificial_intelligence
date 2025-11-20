@@ -9,6 +9,7 @@ import os
 from pydantic import BaseModel, Field
 
 from llm_model import generate_text
+from rag_dnd import rag_dnd_answer
 
 
 app = FastAPI(title="AD331 AI Course Backend", version="1.0.0")
@@ -42,6 +43,20 @@ class LLMGenerateRequest(BaseModel):
     temperature: float = Field(0.7, gt=0.0, le=2.0)
     top_p: float = Field(0.9, gt=0.0, le=1.0)
 
+class RAGRulesRequest(BaseModel):
+    question: str
+
+
+class RAGChunk(BaseModel):
+    id: int
+    text: str
+    score: float
+
+
+class RAGRulesResponse(BaseModel):
+    question: str
+    answer: str
+    retrieved_chunks: List[RAGChunk]
 
 class LLMGenerateResponse(BaseModel):
     prompt: str
@@ -277,6 +292,30 @@ def run_test_cases():
     ))
     
     return experiments
+
+@app.post("/api/assignment5/rag-dnd", response_model=RAGRulesResponse)
+def rag_dnd_endpoint(req: RAGRulesRequest):
+    """
+    Assignment 5 / RAG demo:
+    Answer D&D 2024 rules questions using a small RAG pipeline.
+    """
+    if not req.question.strip():
+        raise HTTPException(status_code=400, detail="Question must not be empty.")
+
+    result = rag_dnd_answer(req.question, k=3)
+
+    # Shape result into the Pydantic response
+    chunks = [
+        RAGChunk(id=c["id"], text=c["text"], score=c["score"])
+        for c in result["retrieved_chunks"]
+    ]
+
+    return RAGRulesResponse(
+        question=result["question"],
+        answer=result["answer"],
+        retrieved_chunks=chunks,
+    )
+
 
 
 if __name__ == "__main__":
