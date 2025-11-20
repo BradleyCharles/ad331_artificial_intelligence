@@ -1,0 +1,333 @@
+FILE_VERSION: 1
+FILE_PURPOSE: DND_2024_RULE_CHANGES_FOR_RAG
+SOURCE_RULESET_OLD: DND_5E_2014_CORE
+SOURCE_RULESET_NEW: DND_5E_2024_REVISION
+NOTE: This file summarizes systemic rules differences; it is not a full rules text and avoids reproducing proprietary wording.
+
+================================================================
+SECTION: GLOBAL_RULE_CHANGES
+================================================================
+
+RULE:
+  ID: GLOBAL_001
+  TITLE: Backwards-Compatible 2024 Revision Scope
+  TYPE: CORE_RULESET_SCOPE
+  SUMMARY_OLD: 2014 core rules defined by PHB 2014, DMG 2014, MM 2014 plus optional supplements.
+  SUMMARY_NEW: 2024 Player’s Handbook and Dungeon Master’s Guide replace the 2014 PHB/DMG rules for classes, subclasses, spells, feats, equipment, species, and backgrounds while remaining broadly backwards compatible with 5e adventures and monsters.
+  IMPACT: When the 2024 books are in use, their versions of player options and core rules supersede 2014 versions unless a table explicitly chooses otherwise.
+
+RULE:
+  ID: GLOBAL_002
+  TITLE: Terminology – Race To Species And Formal Glossary
+  TYPE: TERMINOLOGY
+  SUMMARY_OLD: The term “race” used for PC ancestry; many game concepts (enemy, d20 roll types) not strongly formalized; glossary less central.
+  SUMMARY_NEW: “Race” is replaced with “species” for PCs. A rules glossary defines many precise terms (e.g., “d20 Test,” “enemy,” “Magic action”). Ability checks, saving throws, and attack rolls are all specific kinds of “d20 Tests.”
+  IMPACT: Text that refers to race now maps to species; rules queries should treat “d20 Test” as the generic concept and then specialize to attack/ability/save when needed.
+
+RULE:
+  ID: GLOBAL_003
+  TITLE: Magic Action
+  TYPE: ACTION_SYSTEM
+  SUMMARY_OLD: Casting a spell used the “Cast a Spell” action; some magical abilities were their own bespoke actions.
+  SUMMARY_NEW: Casting spells, activating magic items that require an action, and many magical class features are unified under the “Magic action.” Some abilities explicitly say they are NOT a Magic action and thus may work in antimagic.
+  IMPACT: For rules reasoning, treat “Magic action” as the parent category for most player-facing active magic use; interactions that shut down or modify magic can target this unified action type.
+
+RULE:
+  ID: GLOBAL_004
+  TITLE: Heroic Inspiration (Replaces Old Inspiration)
+  TYPE: RESOURCE_MECHANIC
+  SUMMARY_OLD: Inspiration was a loosely defined binary flag; typically spent to gain advantage on one d20 roll, often forgotten or unused; award conditions vague and table-dependent.
+  SUMMARY_NEW: Inspiration is renamed and formalized as “Heroic Inspiration.” It can be spent to reroll a die you just rolled (any die in many cases, not only d20 Tests), with the new result replacing the old. If you would gain Heroic Inspiration while already having it, you can typically pass it to an ally; some species/background/class rules auto-award it (e.g., certain long rests or notable checks).
+  IMPACT: RAG answer should treat Heroic Inspiration as a structured, more frequently used reroll mechanic, not just a rarely-applied advantage flag.
+
+RULE:
+  ID: GLOBAL_005
+  TITLE: Exhaustion Simplification
+  TYPE: CONDITION_SYSTEM
+  SUMMARY_OLD: Exhaustion had 6 levels, each with a different effect (disadvantage on checks, speed halved, disadvantage on attacks/saves, hit point max halved, speed 0, death).
+  SUMMARY_NEW: Exhaustion still has levels but uses a linear numeric penalty: each level applies a cumulative penalty to d20 Tests and reduces speed by a fixed amount; at a certain level (still 6) the character dies. Long rests reduce the exhaustion level by 1.
+  IMPACT: When answering rules about exhaustion, use a single scaling penalty plus speed reduction instead of a tiered list of unrelated effects.
+
+RULE:
+  ID: GLOBAL_006
+  TITLE: Surprise Rework
+  TYPE: INITIATIVE_AND_COMBAT_FLOW
+  SUMMARY_OLD: Surprised creatures skipped their first turn and could not move or act on that first round until their turn ended.
+  SUMMARY_NEW: Surprise is simplified: surprised creatures suffer disadvantage on their initiative roll (and no longer lose an entire turn by default).
+  IMPACT: Encounter flow is smoother; no “you lose your whole first turn” logic. RAG answers should mention initiative disadvantage as the mechanical expression of surprise in 2024 rules.
+
+RULE:
+  ID: GLOBAL_007
+  TITLE: Rest Rules Tweaks
+  TYPE: ADVENTURING_RULES
+  SUMMARY_OLD: Long rest could be abused by casting leftover spell slots at the end before resting; some interactions around short/long rest timing looser.
+  SUMMARY_NEW: Long-rest procedures are more explicitly defined to prevent using remaining slots at the very end “for free.” Spell slot and feature recovery triggers are clarified; some classes have updated relationships to short vs. long rests.
+  IMPACT: When reasoning about “nova then rest” exploits, the 2024 rules are slightly less permissive; assume tighter timing around when a rest begins and when resources can be used.
+
+RULE:
+  ID: GLOBAL_008
+  TITLE: Spellcasting Model – Everyone Prepares Spells
+  TYPE: SPELLCASTING_STRUCTURE
+  SUMMARY_OLD: Two major caster models: “prepared casters” (e.g., cleric, druid, wizard) vs. “known spells” casters (e.g., sorcerer, bard, warlock); known-casters could not freely swap spells each day.
+  SUMMARY_NEW: All spellcasting classes use a preparation model. Each specifies how many spells can be prepared and how often they can be changed. The divide between “known” and “prepared” casters is removed.
+  IMPACT: RAG answers about learning vs. preparing spells should reflect that, in the 2024 revision, all classes prepare spells from a larger list and can reconfigure loadouts on the timescale defined by their class.
+
+RULE:
+  ID: GLOBAL_009
+  TITLE: New Area Shape – Emanation
+  TYPE: SPELL_GEOMETRY
+  SUMMARY_OLD: Areas were primarily cone, line, cylinder, cube, and sphere.
+  SUMMARY_NEW: The 2024 rules add “Emanation” as a formal area type, typically representing effects that originate from and remain centered on the caster or a fixed point while extending outward.
+  IMPACT: When describing AoE shapes, include “Emanation” as an option; some spells formerly expressed in other shapes may be reworded into Emanations.
+
+RULE:
+  ID: GLOBAL_010
+  TITLE: Licensing And SRD 5.2 (Meta Rule Access)
+  TYPE: META_PUBLISHING
+  SUMMARY_OLD: SRD 5.1 under OGL; more complex licensing; fewer official spells, feats, and monsters included.
+  SUMMARY_NEW: System Reference Document 5.2 for the updated rules is released under Creative Commons (CC-BY 4.0). It adds more feats, weapon masteries, additional spells, more magic items, and several monsters while aligning with the 2024 core rules.
+  IMPACT: Third-party content may reference the updated mechanics more freely; RAG systems can legally ingest SRD 5.2 content directly (not the full PHB/DMG texts).
+
+================================================================
+SECTION: CHARACTER_CREATION_AND_PROGRESS
+================================================================
+
+RULE:
+  ID: CHAR_001
+  TITLE: Ability Score Increases From Backgrounds, Not Species
+  TYPE: CHARACTER_CREATION
+  SUMMARY_OLD: Ability Score Increases (ASIs) were attached to race; the PHB suggested fixed arrays like +2/+1 tied to a specific race.
+  SUMMARY_NEW: ASIs are granted by backgrounds instead of species. Standard options include +2 to one ability and +1 to another, or +1 to three abilities, chosen within background rules. Species generally no longer carry fixed ASIs.
+  IMPACT: Species choice is decoupled from ability optimization; background now critically influences stats and early build direction.
+
+RULE:
+  ID: CHAR_002
+  TITLE: Backgrounds Overhaul And Origin Feats
+  TYPE: CHARACTER_CREATION
+  SUMMARY_OLD: Backgrounds primarily granted proficiencies, a feature, and starting equipment; little direct mechanical power in combat.
+  SUMMARY_NEW: Backgrounds now:
+    - Provide ability score increases.
+    - Grant an “Origin Feat” (a feat available at 1st level tied to the background).
+    - Include both premade and build-your-own options.
+  IMPACT: Backgrounds become a major mechanical axis; any RAG guidance for 2024 character building should treat background as equally important to class and species for early optimization.
+
+RULE:
+  ID: CHAR_003
+  TITLE: Core Species Lineup And Subrace Removal
+  TYPE: SPECIES_RULES
+  SUMMARY_OLD: 2014 PHB core races included Humans, Dwarves (Hill/Mountain), Elves (High/Wood/Drow), Halflings (Lightfoot/Stout), Dragonborn, Gnomes, Half-Elves, Half-Orcs, Tieflings. Many had mechanical subraces.
+  SUMMARY_NEW:
+    - “Race” is renamed “Species.”
+    - The PHB core species list is revised; Aasimar, Orc, and Goliath become PHB-core; Half-Elf and Half-Orc are removed as separate species and are instead folded into other options/lineages.
+    - Several old PHB subraces are removed or restructured into lineage-like options (e.g., elf lineages for high elf, wood elf, drow).
+  IMPACT: For RAG answers, “Half-Elf” and “Half-Orc” as distinct PHB species no longer exist in the 2024 baseline; elf, dwarf, halfling, etc. are handled via updated, more magical, lineage-structured species entries.
+
+RULE:
+  ID: CHAR_004
+  TITLE: Species Focus More On Innate Magic And Thematic Abilities
+  TYPE: SPECIES_RULES
+  SUMMARY_OLD: Racial features mostly small, static bonuses (darkvision, resistances, proficiencies, etc.); subrace sometimes added minor spells.
+  SUMMARY_NEW: Species and their lineages often grant spellcasting linked to level (e.g., gaining certain spells at higher character levels), along with thematic passive features emphasizing innate magic and identity.
+  IMPACT: Species choice has a more noticeable impact on spell access and utility; RAG system should expect “this species grants these spells at these levels” as a common pattern.
+
+RULE:
+  ID: CHAR_005
+  TITLE: Feats Become Core, Tiered, And Often Half-Feats
+  TYPE: FEAT_SYSTEM
+  SUMMARY_OLD: Feats were an optional rule; ASIs and feats competed in the same level slots; some tables banned them.
+  SUMMARY_NEW:
+    - Feats are assumed core.
+    - Origin Feats exist at 1st level via background.
+    - Many feats are tied to level bands or prerequisites.
+    - Most general feats increase an ability score by +1 (half-feats), up to a cap, in addition to providing a feature.
+  IMPACT: Builds effectively have “more feats” baked in; RAG logic should not treat feats as optional in 2024 rules and should assume at least one feat from background for standard characters.
+
+RULE:
+  ID: CHAR_006
+  TITLE: Weapon Mastery System
+  TYPE: WEAPONS_AND_COMBAT
+  SUMMARY_OLD: Weapons were mostly distinguished by damage die, damage type, properties like Heavy/Light/Finesse/Reach, and cost; some class features expanded their use.
+  SUMMARY_NEW:
+    - Each weapon now has exactly one Weapon Mastery property (e.g., Cleave, Nick, Push, Topple, Slow, etc.).
+    - Only characters with class features granting Weapon Mastery (e.g., fighter and certain other martials) can use these properties.
+    - Mastery effects provide tactical riders (extra movement, forced movement, debuffs, multi-target hits, etc.).
+  IMPACT: Weapon choice strongly affects tactical play; when answering combat questions, consider both damage and mastery riders. For dual wielding, the Nick mastery is particularly impactful.
+
+RULE:
+  ID: CHAR_007
+  TITLE: Two-Weapon Fighting And The Light Property
+  TYPE: WEAPONS_AND_COMBAT
+  SUMMARY_OLD: Two-weapon fighting used a specific rule for “light melee weapons”; the interaction with feats and fighting styles was more constrained.
+  SUMMARY_NEW:
+    - Two-weapon fighting is explicitly keyed to the Light property of weapons, and interacts with Weapon Mastery (especially Nick) to make dual wielding stronger and more common.
+    - Rules are clarified for drawing, equipping, and attacking with two light weapons.
+  IMPACT: Dual wield builds, especially Dexterity-based, become more mechanically attractive. RAG answers about dual wielding in 2024 should assume it is a supported and powerful option.
+
+RULE:
+  ID: CHAR_008
+  TITLE: Unified Class Structure And Subclass Progression
+  TYPE: CLASS_FRAMEWORK
+  SUMMARY_OLD: Classes had varying subclass counts and subclass levels (e.g., clerics at 1st, druids at 2nd, fighters at 3rd; wizard had many schools; bard had few colleges).
+  SUMMARY_NEW:
+    - Each of the 12 PHB classes has four PHB subclasses.
+    - All classes gain their subclass at level 3.
+    - Many class feature progressions are normalized across classes (e.g., key features at similar levels).
+  IMPACT: Any advice like “you pick your domain at level 1” is legacy; for 2024 rules, subclass choice almost always occurs at level 3. RAG outputs should treat “subclass at 3” as default.
+
+RULE:
+  ID: CHAR_009
+  TITLE: Class Power Level Slightly Increased And Smoothed
+  TYPE: CLASS_BALANCE
+  SUMMARY_OLD: Some classes had sparse levels (gaps of several levels with little power gain), and outlier features that were too strong or weak.
+  SUMMARY_NEW:
+    - Many classes receive more uses of key abilities, better scaling, or reworded features to reduce dead levels and address known pain points (e.g., fighter’s recovery features improved; druid wild shape reworked into temporary hit points; several subclass capstones adjusted).
+  IMPACT: Characters in 2024 are, on average, somewhat more resilient and flexible than their 2014 counterparts; RAG comparisons should not assume identical feature text or scaling.
+
+RULE:
+  ID: CHAR_010
+  TITLE: Conjure/Polymorph/Simulacrum-Style Spell Revisions
+  TYPE: SPELL_BALANCE
+  SUMMARY_OLD: Many conjuration/polymorph spells generated multiple creatures or replaced the target’s statistics entirely, creating extra turns and heavy bookkeeping.
+  SUMMARY_NEW:
+    - Conjure-style spells usually summon one creature instead of a swarm.
+    - Polymorph-style effects often provide temporary hit points and new abilities instead of fully replacing the target’s stat block.
+  IMPACT: Spells that previously flooded the battlefield with bodies or fully rewrote stats are now leaner; when describing summons or polymorph in 2024 rules, assume “fewer bodies, less bookkeeping, more temp HP.”
+
+RULE:
+  ID: CHAR_011
+  TITLE: Force And Other Exotic Damage Types More Common
+  TYPE: DAMAGE_MODEL
+  SUMMARY_OLD: Many effects dealt bludgeoning/piercing/slashing or one of the basic energy types; force damage was rarer.
+  SUMMARY_NEW: More effects and spells deal force and other non-physical damage types, partly to interact better with changed monster resistances and the updated damage ecosystem.
+  IMPACT: Builds that care about damage type (resistances, vulnerabilities, bypassing defenses) interact with a richer set of damage types; RAG answers should expect force damage to be more prominent in both PC and monster toolkits.
+
+RULE:
+  ID: CHAR_012
+  TITLE: Crafting And Simple Magic Items In PHB
+  TYPE: DOWNTIME_AND_CRAFTING
+  SUMMARY_OLD: Crafting and magic item creation rules lived primarily in the DMG and were limited or vague; many tables used homebrew.
+  SUMMARY_NEW:
+    - Crafting rules, including simple magic items and low-level scrolls, are formalized and moved/expanded into the PHB rules framework.
+    - Assumes campaigns will commonly allow basic magic item crafting with specified costs and time.
+  IMPACT: RAG answers can rely on explicit 2024 crafting rules instead of advising “this is DM-dependent” for basic scrolls and low-rarity items.
+
+================================================================
+SECTION: TACTICS_AND_CORE_MECHANICS_REFINEMENTS
+================================================================
+
+RULE:
+  ID: MECH_001
+  TITLE: Unarmed Strikes, Grapple, And Shove Rework
+  TYPE: COMBAT_RULES
+  SUMMARY_OLD: Grapple and shove were special contests (attack vs. ability check; opposed checks); unarmed strikes were a special case with low damage and particular wording.
+  SUMMARY_NEW:
+    - Grapple and shove are integrated into unarmed strikes and resolved via saving throws instead of opposed ability checks.
+    - Unarmed strikes are more clearly defined as a unified mechanic; classes that specialize in them leverage this clarity.
+  IMPACT: Rules explanations should avoid old “contested check” language for grapple/shove; instead reference save-based resolutions tied to a standardized unarmed strike framework.
+
+RULE:
+  ID: MECH_002
+  TITLE: Equip/Unequip During Attacks
+  TYPE: ACTION_AND_OBJECT_INTERACTION
+  SUMMARY_OLD: Free object interaction rules led to grey areas when drawing/switching multiple weapons during multiattack or Extra Attack sequences.
+  SUMMARY_NEW: The 2024 rules explicitly allow equipping or unequipping one weapon as part of making attacks when you take the Attack action, within defined limits.
+  IMPACT: RAG answers should acknowledge that swapping a single weapon in or out during the Attack action is supported and does not always require a dedicated interaction outside the attack.
+
+RULE:
+  ID: MECH_003
+  TITLE: Hide And Invisibility Clarification
+  TYPE: STEALTH_RULES
+  SUMMARY_OLD: Hiding and invisibility created many table debates about when an enemy was “aware” or whether hidden attackers got advantage.
+  SUMMARY_NEW:
+    - Hide is linked more clearly to the Invisibility condition and being unseen/undetected.
+    - The conditions and checks for entering and staying hidden are more formally defined.
+  IMPACT: RAG explanations of stealth in 2024 can lean on the Invisibility condition and explicit wording rather than fuzzy “DM decides” interpretations from 2014 text.
+
+RULE:
+  ID: MECH_004
+  TITLE: Guidance, Bardic Inspiration, And “Reaction-Based” Support
+  TYPE: SUPPORT_MECHANICS
+  SUMMARY_OLD: Guidance and Bardic Inspiration timing and stacking created strong “pre-roll buff” patterns (e.g., spamming Guidance before every check).
+  SUMMARY_NEW:
+    - Several support abilities (not all spelled out here) have shifted toward reaction-based use after seeing a roll but before the outcome is known, and/or have frequency limits that discourage spamming.
+  IMPACT: The design trend is “fewer pre-spam buffs, more reactive decision points.” RAG answers should assume that always-on pre-check Guidance spam is not the intended 2024 pattern.
+
+================================================================
+SECTION: DUNGEON_MASTER_FACING_RULE_CHANGES (DMG_2024)
+================================================================
+
+RULE:
+  ID: DM_001
+  TITLE: DM Advice As A Primary Feature
+  TYPE: DMG_STRUCTURE
+  SUMMARY_OLD: 2014 DMG opened with worldbuilding and optional rules; advice on session prep and table management was present but scattered.
+  SUMMARY_NEW:
+    - 2024 DMG foregrounds guidance on how to run the game: session prep, pacing, handling player conflicts, metagaming, table expectations, and encounter construction.
+    - Includes step-by-step guidance for building satisfying narrative arcs and adventures.
+  IMPACT: For RAG “how do I DM?” questions using 2024 as baseline, there is a stronger, more structured reference within official rules, rather than relying purely on homebrew DMing advice.
+
+RULE:
+  ID: DM_002
+  TITLE: Bastions – Player Bases As A Formal System
+  TYPE: BASE_BUILDING
+  SUMMARY_OLD: Strongholds/bases were mostly a narrative concept with light downtime rules; no unified, core mechanical subsystem.
+  SUMMARY_NEW:
+    - Introduces “Bastions,” a structured system for player bases that have upgrade paths, downtime effects, and hooks into the campaign (income, defenses, services).
+    - Ties bastions to character progression and downtime between adventures.
+  IMPACT: Base-building is now supported by formal rules; RAG answers about keeps/towers/lairs in 2024 should consider bastion mechanics rather than purely ad hoc rulings.
+
+RULE:
+  ID: DM_003
+  TITLE: Revised Magic Item Crafting System
+  TYPE: MAGIC_ITEMS
+  SUMMARY_OLD: Magic item crafting in the DMG was sparse and often ignored; tables frequently homebrewed costs and times.
+  SUMMARY_NEW:
+    - Crafting rules for magic items are expanded and integrated with treasure guidelines.
+    - Costs, time, and requirements are more clearly specified, with more items covered.
+  IMPACT: When the user asks about crafting magic items under 2024 rules, RAG answers should reference a more detailed default framework instead of saying “there are almost no official rules.”
+
+RULE:
+  ID: DM_004
+  TITLE: Greyhawk-Lite Default Campaign Framework
+  TYPE: SETTING_SUPPORT
+  SUMMARY_OLD: 2014 DMG provided a generic, multi-setting-agnostic set of tools, with only light references to any specific world.
+  SUMMARY_NEW:
+    - 2024 DMG includes a streamlined Greyhawk-based setting scaffold with locations, factions, and sample adventures.
+    - Emphasis on giving DMs a concrete “default” to run with minimal prep.
+  IMPACT: RAG guidance can assume a light Greyhawk frame is officially supported if a DM has not chosen another explicit setting.
+
+RULE:
+  ID: DM_005
+  TITLE: Monster And Treasure Guidance Adjustments (Pre-2025 MM)
+  TYPE: ENCOUNTER_AND_LOOT
+  SUMMARY_OLD: Encounter building and treasure tables were sometimes hard to use; some challenge guidelines were off.
+  SUMMARY_NEW:
+    - 2024 DMG refines encounter-building tools and treasure guidelines in preparation for the revised Monster Manual.
+    - Treasure types and habitat suggestions see more explicit support (some details tied to 2025 MM, but the planning tools appear in DMG 2024).
+  IMPACT: When building encounters using 2024/2025 rules, the DMG now expects synergy with updated monsters and treasure types; for a RAG agent, note that encounter difficulty math may differ slightly from 2014 guidance.
+
+================================================================
+SECTION: META_NOTES_FOR_RAG_SYSTEM
+================================================================
+
+NOTE:
+  ID: META_001
+  TITLE: Edition Tagging Strategy
+  CONTENT: When answering user questions, tag mechanics as “2014 PHB rules” vs. “2024 PHB rules” when ambiguity exists. If a user references “new PHB” or “2024 rules,” default to the 2024 mechanics in this file.
+
+NOTE:
+  ID: META_002
+  TITLE: Compatibility With Older Adventures
+  CONTENT: Official messaging frames the 2024 revision as backwards-compatible with 5e. For older published adventures, assume monsters and treasure work mostly as written, but PC options and rules references should use 2024 interpretations unless a conflict is obvious.
+
+NOTE:
+  ID: META_003
+  TITLE: Handling Legacy Concepts (Half-Elf/Half-Orc, Old Subclasses)
+  CONTENT: If a user brings legacy species or subclasses from 2014 into a 2024 game, treat them as “legacy options” and clarify that they are not in the 2024 PHB baseline; suggest DM approval and adaptation to new rules (e.g., ASIs from background, updated spell-prep model, etc.).
+
+NOTE:
+  ID: META_004
+  TITLE: Avoid Quoting Proprietary Text
+  CONTENT: When generating answers from this knowledge, describe effects and rule changes in your own words; do not reproduce full rules text or long passages that mirror the official books verbatim.
+
+END_OF_FILE
