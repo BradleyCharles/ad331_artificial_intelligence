@@ -56,7 +56,7 @@ def generate_text(
 
     system_instruction = (
         "You are a helpful, knowledgeable AI assistant. "
-        "Answer the following question clearly and concisely in normal prose."
+        "Answer the following question clearly and concisely."
     )
 
     full_prompt = (
