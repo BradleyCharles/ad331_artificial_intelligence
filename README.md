@@ -2,7 +2,7 @@
 
 A comprehensive machine learning project for predicting security incident detection times using linear regression. Features data analysis, model training, evaluation, and an interactive web dashboard.
 
-## 🎯 Project Overview b
+## 🎯 Project Overview
 
 This project implements an end-to-end machine learning pipeline to predict the time it takes to detect security incidents. The solution includes:
 
