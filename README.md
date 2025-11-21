@@ -2,7 +2,7 @@
 
 A comprehensive machine learning project for predicting security incident detection times using linear regression. Features data analysis, model training, evaluation, and an interactive web dashboard.
 
-## 🎯 Project Overview
+## 🎯 Project Overview b
 
 This project implements an end-to-end machine learning pipeline to predict the time it takes to detect security incidents. The solution includes:
 
@@ -30,6 +30,7 @@ This project implements an end-to-end machine learning pipeline to predict the t
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd ad331_artificial_intelligence
@@ -38,11 +39,13 @@ This project implements an end-to-end machine learning pipeline to predict the t
 2. **Install dependencies**
 
    Frontend (Next.js):
+
    ```bash
    npm install
    ```
 
    Backend (Python):
+
    ```bash
    pip install -r backend/requirements.txt
    ```
@@ -50,10 +53,13 @@ This project implements an end-to-end machine learning pipeline to predict the t
 ### Running the Application
 
 #### Option 1: Start Everything at Once (Recommended)
+
 ```bash
 python3 start_all.py
 ```
+
 This script will:
+
 - Check requirements
 - Optionally install/update dependencies
 - Start both frontend and backend servers
@@ -61,33 +67,41 @@ This script will:
 #### Option 2: Manual Start
 
 **Start Frontend:**
+
 ```bash
 npm run dev
 ```
+
 Frontend will be available at `http://localhost:3000`
 
 **Start Backend:**
+
 ```bash
 cd backend
 python main.py
 ```
+
 Backend will be available at `http://localhost:8000`
 
 #### Alternative Startup Scripts
+
 - Linux/Mac: `./start_all.sh`
 - Windows: `start_all.bat`
 
 ## 📋 Running Analysis Scripts
 
 ### Complete Analysis Pipeline
+
 ```bash
 python3 run_analysis.py
 ```
+
 Interactive menu to run all scripts in sequence.
 
 ### Individual Scripts
 
 #### Data Analysis
+
 ```bash
 # Generate comprehensive visualizations
 python3 scripts/data_analysis/visualize_data.py
@@ -97,6 +111,7 @@ python3 scripts/data_analysis/failed_logins_analysis.py
 ```
 
 #### Model Training
+
 ```bash
 # Train the linear regression model
 python3 scripts/model_training/train_linear_regression.py
@@ -106,6 +121,7 @@ python3 scripts/model_training/test_model_performance.py
 ```
 
 #### Utilities
+
 ```bash
 # Interactive predictions
 python3 scripts/utilities/predict_with_model.py
@@ -117,6 +133,7 @@ python3 scripts/utilities/view_plots.py
 ## 🌐 Web Interface
 
 ### Main Dashboard
+
 - **Route**: `/assignment2`
 - **Features**:
   - Dataset overview and statistics
@@ -125,6 +142,7 @@ python3 scripts/utilities/view_plots.py
   - Links to all visualizations
 
 ### Interactive Visualizations
+
 - **Scatter Matrix** (`/assignment2/scatter-matrix`): Feature relationships
 - **3D Scatter Plot** (`/assignment2/3d-scatter`): 3D feature visualization
 - **Correlation Heatmap** (`/assignment2/correlation`): Feature correlations
@@ -171,16 +189,20 @@ ad331_artificial_intelligence/
 ## 📊 Generated Outputs
 
 ### Models
+
 - `best_linear_regression_model.pkl`: Trained model ready for predictions
 
 ### Reports
+
 - `data_analysis_report.md`: Comprehensive data analysis
 - `model_results_summary.txt`: Training results
 - `model_test_performance_report.md`: Test performance details
 - `WEEK2_DATA_ANALYSIS.md`: Week 2 specific analysis
 
 ### Visualizations
+
 **Static (PNG)**:
+
 - Dataset overview
 - Feature analysis
 - Correlation heatmap
@@ -191,6 +213,7 @@ ad331_artificial_intelligence/
 - Failed logins hourly analysis
 
 **Interactive (HTML)**:
+
 - Scatter matrix
 - 3D scatter plot
 - Correlation heatmap
@@ -200,17 +223,20 @@ ad331_artificial_intelligence/
 ## 🔧 Technical Stack
 
 ### Frontend
+
 - **Framework**: Next.js 15.5.6
 - **UI**: React 19.1.0
 - **Styling**: Tailwind CSS 4
 - **Language**: TypeScript 5
 
 ### Backend
+
 - **Framework**: FastAPI 0.115.2
 - **Server**: Uvicorn 0.30.6
 - **Validation**: Pydantic 2.9.2
 
 ### Machine Learning
+
 - **Framework**: scikit-learn 1.5.2
 - **Data Processing**: pandas 2.2.3, numpy 2.3.4
 - **Visualization**: matplotlib 3.9.2, seaborn 0.13.2, plotly
@@ -219,6 +245,7 @@ ad331_artificial_intelligence/
 ## 📈 Model Insights
 
 ### Top Predictive Features
+
 1. **Alert Priority** (0.622 correlation)
 2. **Privilege Escalations** (0.599 correlation)
 3. **Average CPU Percent** (0.285 correlation)
@@ -226,6 +253,7 @@ ad331_artificial_intelligence/
 5. **Data Transfer** (0.209 correlation)
 
 ### Performance Characteristics
+
 - All priority levels achieve good prediction accuracy
 - Higher priority alerts show slightly better R² scores
 - Consistent performance across different security scenarios
@@ -249,12 +277,14 @@ ad331_artificial_intelligence/
 ### Building for Production
 
 **Frontend:**
+
 ```bash
 npm run build
 npm start
 ```
 
 ### Running Tests
+
 ```bash
 python3 scripts/model_training/test_model_performance.py
 ```
