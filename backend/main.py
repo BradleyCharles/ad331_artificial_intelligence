@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import numpy as np
-from mnist_fnn import train_and_evaluate_api, predict_digit
+#from mnist_fnn import train_and_evaluate_api, predict_digit
 from typing import List, Optional
 import os
 from pydantic import BaseModel, Field
