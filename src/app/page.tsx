@@ -7,7 +7,7 @@ export default function Home() {
     { number: 3, title: "Building a Simple Neural Network for Classification", description: "The goal of this assignment is to introduce the foundational concepts of Deep Learning by having you build, train, and evaluate a simple Feedforward Neural Network (FNN) using a major deep learning framework (TensorFlow/Keras, PyTorch or scikit-learn)." },
     { number: 4, title: "Generative AI with Pre-trained LLMs", description: "The goal of this assignment is to gain practical experience using state-of-the-art Large Language Models (LLMs) via the Hugging Face Transformers library. You will select a model and implement one core generative task, experimenting with key parameters." },
     { number: 5, title: "Implementing a Simple Retrieval-Augmented Generation (RAG) System", description: "The goal of this assignment is to gain practical experience with Retrieval-Augmented Generation (RAG), a key technique used to ground Large Language Models (LLMs) in external, factual knowledge." },
-    { number: 6, title: "", description: "" },
+    { number: 6, title: "Prompt Engineering for Performance Improvement", description: "The goal of this assignment is to demonstrate the practical impact of prompt engineering on Large Language Model (LLM) performance. You will select a challenging task and iteratively apply at least three distinct prompt techniques to significantly improve the model's output quality." },
     { number: 7, title: "", description: "" },
     { number: 8, title: "", description: "" },
     { number: 9, title: "", description: "" },
