@@ -15,6 +15,14 @@ interface ExtractionTest {
   buildPrompt: (input: string) => string;
 }
 
+interface Evaluation {
+  formatScore: number;
+  styleScore: number;
+  clarityScore: number;
+  overall: number;
+  notes: string[];
+}
+
 interface RunResult {
   testId: TestId;
   prompt: string;
