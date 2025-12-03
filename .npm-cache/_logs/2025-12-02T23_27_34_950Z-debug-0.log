@@ -1,0 +1,27 @@
+0 verbose cli /usr/bin/node-22 /usr/lib/node_modules_22/npm/bin/npm-cli.js
+1 info using npm@10.9.3
+2 info using node@v22.20.0
+3 silly config load:file:/usr/lib/node_modules_22/npm/npmrc
+4 silly config load:file:/home/malocus/GitHub/ad331_artificial_intelligence/.npmrc
+5 silly config load:file:/home/malocus/.npmrc
+6 silly config load:file:/etc/npmrc
+7 verbose title npm exec tailwindcss -i src/app/globals.css -o /tmp/out.css
+8 verbose argv "exec" "--" "tailwindcss" "-i" "src/app/globals.css" "-o" "/tmp/out.css"
+9 verbose logfile logs-max:10 dir:/home/malocus/GitHub/ad331_artificial_intelligence/.npm-cache/_logs/2025-12-02T23_27_34_950Z-
+10 verbose logfile /home/malocus/GitHub/ad331_artificial_intelligence/.npm-cache/_logs/2025-12-02T23_27_34_950Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 verbose stack Error: could not determine executable to run
+13 verbose stack     at getBinFromManifest (/usr/lib/node_modules_22/npm/node_modules/libnpmexec/lib/get-bin-from-manifest.js:17:23)
+13 verbose stack     at exec (/usr/lib/node_modules_22/npm/node_modules/libnpmexec/lib/index.js:202:15)
+13 verbose stack     at async Npm.exec (/usr/lib/node_modules_22/npm/lib/npm.js:207:9)
+13 verbose stack     at async module.exports (/usr/lib/node_modules_22/npm/lib/cli/entry.js:74:5)
+14 verbose pkgid tailwindcss@4.1.14
+15 error could not determine executable to run
+16 verbose cwd /home/malocus/GitHub/ad331_artificial_intelligence
+17 verbose os Linux 6.17.9-200.nobara.fc43.x86_64
+18 verbose node v22.20.0
+19 verbose npm  v10.9.3
+20 verbose exit 1
+21 verbose code 1
+22 error A complete log of this run can be found in: /home/malocus/GitHub/ad331_artificial_intelligence/.npm-cache/_logs/2025-12-02T23_27_34_950Z-debug-0.log

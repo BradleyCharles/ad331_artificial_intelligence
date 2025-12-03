@@ -1,7 +1,7 @@
 from __future__ import annotations
+from dataclasses import asdict
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 import numpy as np
 #from mnist_fnn import train_and_evaluate_api, predict_digit
 from typing import List, Optional
@@ -9,6 +9,7 @@ import os
 from pydantic import BaseModel, Field
 
 from llm_model import generate_text
+from assignment7_roberta import RobertaLoraPipeline
 from rag_dnd import rag_dnd_answer
 
 
@@ -86,8 +87,42 @@ class PredictResponse(BaseModel):
     probabilities: list[float]
 
 
+class Assignment7TrainRequest(BaseModel):
+    dataset_name: Optional[str] = Field(
+        "SetFit/subj",
+        description="Hugging Face dataset name. Defaults to SetFit/subj; leave blank to use the bundled fallback.",
+    )
+    max_samples: int = Field(
+        1000,
+        ge=10,
+        description="Limit rows for quick fine-tuning while keeping splits balanced.",
+    )
+    num_train_epochs: float = Field(10.0, gt=0, description="Epochs for LoRA fine-tuning.")
+    learning_rate: float = Field(5e-4, gt=0, description="Learning rate for AdamW.")
+    weight_decay: float = Field(0.01, ge=0, description="Weight decay for AdamW.")
+    warmup_ratio: float = Field(0.06, ge=0, le=1, description="Linear warmup ratio.")
+    label_smoothing: float = Field(0.05, ge=0, le=1, description="Label smoothing factor.")
+    per_device_train_batch_size: int = Field(16, ge=1, description="Batch size per device.")
+    gradient_accumulation_steps: int = Field(
+        1, ge=1, description="Accumulate gradients to simulate a larger batch."
+    )
+    max_length: int = Field(256, ge=64, le=512, description="Max tokens for truncation.")
+    lora_r: int = Field(32, ge=1, description="LoRA rank.")
+    lora_alpha: int = Field(64, ge=1, description="LoRA alpha scaling.")
+    lora_dropout: float = Field(0.1, ge=0.0, le=0.5, description="LoRA dropout.")
+    classification_threshold: float = Field(
+        0.5, ge=0.0, le=1.0, description="Probability threshold for predicting opinion."
+    )
+    seed: int = Field(42, description="Seed for shuffling/splitting.")
+
+
+class Assignment7PredictRequest(BaseModel):
+    text: str = Field(..., description="News statement to classify as factual vs opinion.")
+
+
 # --- Data ---
 assignment_modules: dict = {}  # Placeholder for assignment module data
+assignment7_runner = RobertaLoraPipeline()
 
 # --- Endpoints ---
 
@@ -315,6 +350,55 @@ def rag_dnd_endpoint(req: RAGRulesRequest):
         answer=result["answer"],
         retrieved_chunks=chunks,
     )
+
+
+@app.post("/api/assignment7/train")
+def assignment7_train(req: Assignment7TrainRequest):
+    """
+    Assignment 7: Fine-tune RoBERTa with LoRA to separate factual vs opinion statements.
+    """
+    try:
+        result = assignment7_runner.train(
+            dataset_name=req.dataset_name,
+            seed=req.seed,
+            max_samples=req.max_samples,
+            num_train_epochs=req.num_train_epochs,
+            learning_rate=req.learning_rate,
+            weight_decay=req.weight_decay,
+            warmup_ratio=req.warmup_ratio,
+            label_smoothing=req.label_smoothing,
+            per_device_train_batch_size=req.per_device_train_batch_size,
+            gradient_accumulation_steps=req.gradient_accumulation_steps,
+            max_length=req.max_length,
+            lora_r=req.lora_r,
+            lora_alpha=req.lora_alpha,
+            lora_dropout=req.lora_dropout,
+            classification_threshold=req.classification_threshold,
+        )
+        return result
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail=f"Assignment 7 training failed: {exc}") from exc
+
+
+@app.post("/api/assignment7/predict")
+def assignment7_predict(req: Assignment7PredictRequest):
+    """
+    Assignment 7 inference: classify a statement as factual vs opinion.
+    """
+    if not req.text.strip():
+        raise HTTPException(status_code=400, detail="Text must not be empty.")
+
+    if not assignment7_runner.trained:
+        raise HTTPException(
+            status_code=400,
+            detail="Model not trained yet. Please run the /api/assignment7/train endpoint first.",
+        )
+
+    try:
+        pred = assignment7_runner.predict(req.text)
+        return asdict(pred)
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail=f"Inference failed: {exc}") from exc
 
 
 

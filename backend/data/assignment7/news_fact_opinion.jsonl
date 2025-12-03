@@ -1,0 +1,24 @@
+{"id": 1, "text": "The Department of Labor reported that unemployment fell to 3.8% in May, according to Friday's release.", "label": 0, "label_text": "factual"}
+{"id": 2, "text": "I think the central bank moved too slowly and the rate hike will hurt small businesses most.", "label": 1, "label_text": "opinion"}
+{"id": 3, "text": "NASA confirmed the Artemis II launch window remains set for late 2025 after completing heat shield tests.", "label": 0, "label_text": "factual"}
+{"id": 4, "text": "The mayor's proposal feels like a temporary fix rather than a real solution to housing costs.", "label": 1, "label_text": "opinion"}
+{"id": 5, "text": "The wildfire burned more than 60,000 acres by Tuesday evening, state officials said.", "label": 0, "label_text": "factual"}
+{"id": 6, "text": "Given the pace of storms this season, coastal cities seem completely unprepared for the next hurricane.", "label": 1, "label_text": "opinion"}
+{"id": 7, "text": "The Senate approved the $95 billion aid package after a 68-29 vote held late Thursday.", "label": 0, "label_text": "factual"}
+{"id": 8, "text": "Most analysts doubt the aid package will reach communities that need it most.", "label": 1, "label_text": "opinion"}
+{"id": 9, "text": "The electric utility restored power to 140,000 customers by midnight, according to the company statement.", "label": 0, "label_text": "factual"}
+{"id": 10, "text": "This new electric rate plan seems like a cash grab that will anger consumers all winter.", "label": 1, "label_text": "opinion"}
+{"id": 11, "text": "Elections officials certified the final turnout at 62%, surpassing the 2018 midterm record.", "label": 0, "label_text": "factual"}
+{"id": 12, "text": "Voter enthusiasm in this cycle shows how exhausted people are with the political stalemate.", "label": 1, "label_text": "opinion"}
+{"id": 13, "text": "The World Health Organization declared the outbreak contained after two weeks without new cases.", "label": 0, "label_text": "factual"}
+{"id": 14, "text": "Declaring the outbreak contained feels premature and risks public complacency.", "label": 1, "label_text": "opinion"}
+{"id": 15, "text": "Quarterly filings show the company posted $4.1 billion in revenue, up 11% year over year.", "label": 0, "label_text": "factual"}
+{"id": 16, "text": "Investors are likely to punish the company because growth is still too slow.", "label": 1, "label_text": "opinion"}
+{"id": 17, "text": "The transit agency said service will resume on the Red Line at 5 a.m. after overnight track repairs.", "label": 0, "label_text": "factual"}
+{"id": 18, "text": "Commuters have every right to be skeptical that the agency can stick to its promises.", "label": 1, "label_text": "opinion"}
+{"id": 19, "text": "Customs officers seized 2,300 counterfeit handbags at the port, according to the agency's report.", "label": 0, "label_text": "factual"}
+{"id": 20, "text": "The crackdown on counterfeit goods is mostly symbolic and won't change shopper behavior.", "label": 1, "label_text": "opinion"}
+{"id": 21, "text": "The regional hospital opened a new 24-bed emergency wing on Monday morning.", "label": 0, "label_text": "factual"}
+{"id": 22, "text": "Expanding the ER without hiring more nurses is a recipe for burnout.", "label": 1, "label_text": "opinion"}
+{"id": 23, "text": "State climatologists recorded the driest April in three decades with an average of 0.3 inches of rain.", "label": 0, "label_text": "factual"}
+{"id": 24, "text": "The ongoing drought proves the state waited too long to invest in water storage.", "label": 1, "label_text": "opinion"}
