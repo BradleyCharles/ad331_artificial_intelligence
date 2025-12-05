@@ -2,16 +2,57 @@ import Link from "next/link";
 
 export default function Home() {
   const assignments = [
-    { number: 1, title: "Development Environment Setup and Data Exploration", description: "The goal of this assignment is to establish a functional development environment for Machine Learning, demonstrate proficiency with essential Python libraries, and apply basic data exploration and visualization techniques to understand a real-world dataset." },
-    { number: 2, title: "Linear Regression, Data Cleaning, and Feature Engineering", description: "The goal of this assignment is to apply the principles of the ML lifecycle by selecting a real-world dataset, implementing necessary data cleaning and feature engineering steps, and training a simple Linear Regression model to predict a continuous target variable." },
-    { number: 3, title: "Building a Simple Neural Network for Classification", description: "The goal of this assignment is to introduce the foundational concepts of Deep Learning by having you build, train, and evaluate a simple Feedforward Neural Network (FNN) using a major deep learning framework (TensorFlow/Keras, PyTorch or scikit-learn)." },
-    { number: 4, title: "Generative AI with Pre-trained LLMs", description: "The goal of this assignment is to gain practical experience using state-of-the-art Large Language Models (LLMs) via the Hugging Face Transformers library. You will select a model and implement one core generative task, experimenting with key parameters." },
-    { number: 5, title: "Implementing a Simple Retrieval-Augmented Generation (RAG) System", description: "The goal of this assignment is to gain practical experience with Retrieval-Augmented Generation (RAG), a key technique used to ground Large Language Models (LLMs) in external, factual knowledge." },
-    { number: 6, title: "Prompt Engineering for Performance Improvement", description: "The goal of this assignment is to demonstrate the practical impact of prompt engineering on Large Language Model (LLM) performance. You will select a challenging task and iteratively apply at least three distinct prompt techniques to significantly improve the model's output quality." },
-    { number: 7, title: "Parameter-Efficient Fine-Tuning with LoRA", description: "Fine-tune RoBERTa alongside TinyLlama using a LoRA adapter to classify factual vs opinion news statements, with balanced splits and evaluation metrics." },
-    { number: 8, title: "", description: "" },
+    {
+      number: 1,
+      title: "Development Environment Setup and Data Exploration",
+      description:
+        "The goal of this assignment is to establish a functional development environment for Machine Learning, demonstrate proficiency with essential Python libraries, and apply basic data exploration and visualization techniques to understand a real-world dataset.",
+    },
+    {
+      number: 2,
+      title: "Linear Regression, Data Cleaning, and Feature Engineering",
+      description:
+        "The goal of this assignment is to apply the principles of the ML lifecycle by selecting a real-world dataset, implementing necessary data cleaning and feature engineering steps, and training a simple Linear Regression model to predict a continuous target variable.",
+    },
+    {
+      number: 3,
+      title: "Building a Simple Neural Network for Classification",
+      description:
+        "The goal of this assignment is to introduce the foundational concepts of Deep Learning by having you build, train, and evaluate a simple Feedforward Neural Network (FNN) using a major deep learning framework (TensorFlow/Keras, PyTorch or scikit-learn).",
+    },
+    {
+      number: 4,
+      title: "Generative AI with Pre-trained LLMs",
+      description:
+        "The goal of this assignment is to gain practical experience using state-of-the-art Large Language Models (LLMs) via the Hugging Face Transformers library. You will select a model and implement one core generative task, experimenting with key parameters.",
+    },
+    {
+      number: 5,
+      title:
+        "Implementing a Simple Retrieval-Augmented Generation (RAG) System",
+      description:
+        "The goal of this assignment is to gain practical experience with Retrieval-Augmented Generation (RAG), a key technique used to ground Large Language Models (LLMs) in external, factual knowledge.",
+    },
+    {
+      number: 6,
+      title: "Prompt Engineering for Performance Improvement",
+      description:
+        "The goal of this assignment is to demonstrate the practical impact of prompt engineering on Large Language Model (LLM) performance. You will select a challenging task and iteratively apply at least three distinct prompt techniques to significantly improve the model's output quality.",
+    },
+    {
+      number: 7,
+      title: "Parameter-Efficient Fine-Tuning with LoRA",
+      description:
+        "Fine-tune RoBERTa alongside TinyLlama using a LoRA adapter to classify factual vs opinion news statements, with balanced splits and evaluation metrics.",
+    },
+    {
+      number: 8,
+      title: "Evaluating Fine-Tuned LLM Performance",
+      description:
+        "The goal of this assignment is to formally evaluate the performance of the LLM fine-tuned in the previous assignment using appropriate, in-depth classification metrics. You will analyze the results, interpret the meaning of different metrics, and visualize the model's performance to gain critical insights.",
+    },
     { number: 9, title: "", description: "" },
-    { number: 10, title: "", description: "" }
+    { number: 10, title: "", description: "" },
   ];
 
   return (
@@ -20,14 +61,18 @@ export default function Home() {
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8 shadow-lg">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">AD331</h1>
-          <h2 className="text-2xl md:text-3xl font-semibold">Artificial Intelligence</h2>
-         </div>
+          <h2 className="text-2xl md:text-3xl font-semibold">
+            Artificial Intelligence
+          </h2>
+        </div>
       </div>
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h3 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">Assignments</h3>
+          <h3 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">
+            Assignments
+          </h3>
         </div>
 
         {/* Assignments Grid */}
@@ -52,8 +97,18 @@ export default function Home() {
                 </p>
                 <div className="mt-4 flex items-center text-blue-600 dark:text-blue-400 text-sm font-medium">
                   View Details
-                  <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </div>
               </div>
@@ -63,34 +118,78 @@ export default function Home() {
 
         {/* Additional Info */}
         <div className="mt-16 bg-white dark:bg-gray-700 rounded-lg shadow-lg p-8">
-          <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">Course Features</h3>
+          <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+            Course Features
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                <svg
+                  className="w-8 h-8 text-green-600 dark:text-green-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                  />
                 </svg>
               </div>
-              <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Python Programming</h4>
-              <p className="text-gray-600 dark:text-gray-300">Hands-on coding with Python, NumPy, Pandas, and scikit-learn</p>
+              <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                Python Programming
+              </h4>
+              <p className="text-gray-600 dark:text-gray-300">
+                Hands-on coding with Python, NumPy, Pandas, and scikit-learn
+              </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <svg
+                  className="w-8 h-8 text-blue-600 dark:text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
                 </svg>
               </div>
-              <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">FastAPI Backend</h4>
-              <p className="text-gray-600 dark:text-gray-300">Modern API development with FastAPI for assignment management</p>
+              <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                FastAPI Backend
+              </h4>
+              <p className="text-gray-600 dark:text-gray-300">
+                Modern API development with FastAPI for assignment management
+              </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <svg
+                  className="w-8 h-8 text-purple-600 dark:text-purple-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
                 </svg>
               </div>
-              <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Deep Learning</h4>
-              <p className="text-gray-600 dark:text-gray-300">TensorFlow and PyTorch for neural networks and deep learning</p>
+              <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                Deep Learning
+              </h4>
+              <p className="text-gray-600 dark:text-gray-300">
+                TensorFlow and PyTorch for neural networks and deep learning
+              </p>
             </div>
           </div>
         </div>
