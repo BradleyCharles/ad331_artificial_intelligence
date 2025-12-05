@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 
 from llm_model import generate_text
 from assignment7_roberta import RobertaLoraPipeline
+from assignment8_evaluation import Assignment8Evaluator
 from rag_dnd import rag_dnd_answer
 
 
@@ -119,10 +120,27 @@ class Assignment7TrainRequest(BaseModel):
 class Assignment7PredictRequest(BaseModel):
     text: str = Field(..., description="News statement to classify as factual vs opinion.")
 
+class Assignment8EvalRequest(BaseModel):
+    checkpoint: Optional[str] = Field(
+        None,
+        description="Relative checkpoint directory under outputs/assignment7_roberta (e.g., checkpoint-1125). Leave blank to auto-select best eval_f1.",
+    )
+    dataset_name: Optional[str] = Field(
+        None,
+        description="Optional HF dataset name to pull the test split from. Defaults to the cached Assignment 7 test split.",
+    )
+    max_length: int = Field(256, ge=64, le=512, description="Max token length for evaluation.")
+    seed: int = Field(42, description="Shuffle seed for any sampling.")
+    max_samples: Optional[int] = Field(
+        None,
+        ge=10,
+        description="Optional cap on the number of test rows to evaluate (useful for quick smoke tests).",
+    )
 
 # --- Data ---
 assignment_modules: dict = {}  # Placeholder for assignment module data
 assignment7_runner = RobertaLoraPipeline()
+assignment8_evaluator = Assignment8Evaluator()
 
 # --- Endpoints ---
 
@@ -400,6 +418,23 @@ def assignment7_predict(req: Assignment7PredictRequest):
     except Exception as exc:  # noqa: BLE001
         raise HTTPException(status_code=500, detail=f"Inference failed: {exc}") from exc
 
+
+@app.post("/api/assignment8/evaluate")
+def assignment8_evaluate(req: Assignment8EvalRequest):
+    """
+    Assignment 8: Evaluate the fine-tuned Assignment 7 classifier on the held-out test set.
+    Returns macro metrics, per-class scores, a normalized confusion matrix, and misclassified examples.
+    """
+    try:
+        return assignment8_evaluator.evaluate(
+            dataset_name=req.dataset_name,
+            max_length=req.max_length,
+            checkpoint=req.checkpoint,
+            seed=req.seed,
+            max_samples=req.max_samples,
+        )
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail=f"Assignment 8 evaluation failed: {exc}") from exc
 
 
 if __name__ == "__main__":

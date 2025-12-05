@@ -1,327 +1,319 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
-type RunConfig = {
-  baseModel: string;
-  dataset: string;
-  objective: string;
-  learningRate: number;
-  epochs: number;
-  batchSize: number;
-  gradAccum: number;
-  warmupRatio: number;
-  maxSeqLength: number;
-  loraR: number;
-  loraAlpha: number;
-  loraDropout: number;
-};
-
-type ChecklistItem = { id: string; label: string; done: boolean };
-
-type MetricRow = {
-  label: string;
-  accuracy: number;
+type PerClassMetrics = {
+  label_id: number;
+  label_name: string;
+  precision: number;
+  recall: number;
   f1: number;
-  loss: number;
-  notes: string;
+  support: number;
 };
 
-const starterConfig: RunConfig = {
-  baseModel: "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-  dataset: "data/assignment8/custom_dataset.jsonl",
-  objective: "Improve stance classification with tighter calibration and robustness to noisy spans.",
-  learningRate: 0.0002,
-  epochs: 3,
-  batchSize: 32,
-  gradAccum: 2,
-  warmupRatio: 0.08,
-  maxSeqLength: 512,
-  loraR: 16,
-  loraAlpha: 32,
-  loraDropout: 0.1,
+type ErrorExample = {
+  text: string;
+  true_label: string;
+  predicted_label: string;
+  predicted_score: number;
+  reason: string;
 };
 
-const starterChecklist: ChecklistItem[] = [
-  { id: "dataset", label: "Freeze the dataset snapshot and document splits", done: false },
-  { id: "baseline", label: "Record baseline metrics before additional fine-tuning", done: false },
-  { id: "lora", label: "Apply/verify adapter injection and trainable parameter count", done: false },
-  { id: "eval", label: "Evaluate on held-out set + adversarial/noise set", done: false },
-  { id: "report", label: "Write short report: what changed, why, and metrics", done: false },
-];
+type EvaluationResult = {
+  checkpoint: string;
+  dataset: {
+    source: string;
+    num_rows: number;
+    class_distribution: { factual: number; opinion: number };
+    notes: string[];
+  };
+  metrics: {
+    accuracy: number;
+    precision_macro: number;
+    recall_macro: number;
+    f1_macro: number;
+    per_class: PerClassMetrics[];
+  };
+  confusion_matrix: {
+    labels: string[];
+    normalized: number[][];
+    raw: number[][];
+    image_path: string;
+  };
+  error_analysis: {
+    worst_class: PerClassMetrics;
+    examples: ErrorExample[];
+    rationale: string;
+  };
+  runtime_seconds: number;
+};
 
-const starterMetrics: MetricRow[] = [
-  { label: "Zero-shot baseline", accuracy: 0.624, f1: 0.588, loss: 1.42, notes: "No task-specific tuning" },
-  { label: "LoRA warm start", accuracy: 0.781, f1: 0.762, loss: 0.89, notes: "2 epochs, lr=2e-4" },
-];
+const formatMetric = (value?: number, digits = 3) =>
+  typeof value === "number" && Number.isFinite(value) ? value.toFixed(digits) : "—";
 
 export default function Assignment8() {
-  const [config, setConfig] = useState<RunConfig>(starterConfig);
-  const [checklist, setChecklist] = useState<ChecklistItem[]>(starterChecklist);
-  const [metrics, setMetrics] = useState<MetricRow[]>(starterMetrics);
-  const [status, setStatus] = useState(
-    "Use this template to plan your additional fine-tuning run and plug it into your backend or notebooks."
-  );
+  const [result, setResult] = useState<EvaluationResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const completion = useMemo(() => {
-    const done = checklist.filter((item) => item.done).length;
-    return Math.round((done / checklist.length) * 100);
-  }, [checklist]);
+  const runEvaluation = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch("http://localhost:8000/api/assignment8/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
 
-  const updateConfig = <K extends keyof RunConfig>(key: K, value: RunConfig[K]) => {
-    setConfig((prev) => ({ ...prev, [key]: value }));
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(detail || `Evaluation failed with status ${response.status}`);
+      }
+
+      const data = (await response.json()) as EvaluationResult;
+      setResult(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unexpected error while running evaluation.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const toggleChecklist = (id: string) => {
-    setChecklist((prev) => prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item)));
-  };
+  useEffect(() => {
+    void runEvaluation();
+  }, []);
 
-  const saveTemplate = () => {
-    setStatus("Template saved locally. Connect these values to your API call or training notebook when ready.");
-  };
-
-  const simulateRun = () => {
-    const newRow: MetricRow = {
-      label: `Planned run #${metrics.length + 1}`,
-      accuracy: Math.max(0.65, Math.min(0.9, metrics[metrics.length - 1]?.accuracy + 0.015)),
-      f1: Math.max(0.62, Math.min(0.9, metrics[metrics.length - 1]?.f1 + 0.02)),
-      loss: Math.max(0.4, metrics[metrics.length - 1]?.loss - 0.05),
-      notes: `Draft: ${config.epochs} epochs, lr=${config.learningRate}, r=${config.loraR}`,
-    };
-    setMetrics((prev) => [...prev, newRow]);
-    setStatus("Draft run added. Swap this simulation with real metrics once your job completes.");
-  };
+  const worstClass = result?.error_analysis.worst_class;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-100 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950">
-      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-slate-200 dark:border-gray-800">
-        <div className="container mx-auto px-4 py-5 flex items-center justify-between">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-sky-50 to-emerald-100 dark:from-gray-950 dark:via-gray-900 dark:to-emerald-950">
+      <header className="bg-white/90 dark:bg-gray-900/80 backdrop-blur border-b border-slate-200 dark:border-gray-800">
+        <div className="container mx-auto px-4 py-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div>
-            <Link href="/" className="text-indigo-600 dark:text-indigo-300 hover:underline">
+            <Link href="/" className="text-emerald-600 dark:text-emerald-300 hover:underline">
               ← Back to Course
             </Link>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mt-2">Assignment 8 · Additional Fine-Tuning</h1>
-            <p className="text-slate-600 dark:text-gray-300">Plan, track, and document your second-stage tuning pass.</p>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mt-2">Assignment 8 · Model Evaluation</h1>
+            <p className="text-slate-600 dark:text-gray-300">
+              Quantitatively score the Assignment 7 classifier with macro metrics, a confusion matrix, and targeted error
+              analysis.
+            </p>
           </div>
-          <div className="text-right">
-            <div className="inline-flex items-center gap-2 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-100 px-4 py-2 rounded-full text-sm font-semibold">
-              <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
-              Template Ready
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => runEvaluation()}
+              disabled={loading}
+              className="px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {loading ? "Scoring…" : "Run Evaluation"}
+            </button>
+            <div className="px-3 py-1 rounded-full bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-200 text-sm">
+              Checkpoint: {result?.checkpoint ?? "—"}
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="container mx-auto px-4 py-10 space-y-8">
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="md:col-span-2 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-slate-200/60 dark:border-gray-800 p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Run Configuration</h2>
-              <button
-                onClick={saveTemplate}
-                className="px-3 py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700"
-              >
-                Save Template
-              </button>
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-600 dark:text-gray-300">Base model</label>
-                <select
-                  value={config.baseModel}
-                  onChange={(e) => updateConfig("baseModel", e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2"
-                >
-                  <option>TinyLlama/TinyLlama-1.1B-Chat-v1.0</option>
-                  <option>microsoft/phi-2</option>
-                  <option>HuggingFaceH4/zephyr-7b-beta</option>
-                  <option>tiiuae/falcon-7b-instruct</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-600 dark:text-gray-300">Dataset path</label>
-                <input
-                  value={config.dataset}
-                  onChange={(e) => updateConfig("dataset", e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2"
-                  placeholder="data/assignment8/custom_dataset.jsonl"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-600 dark:text-gray-300">Objective</label>
-                <textarea
-                  value={config.objective}
-                  onChange={(e) => updateConfig("objective", e.target.value)}
-                  rows={2}
-                  className="mt-1 w-full rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2"
-                />
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-4 pt-2">
-              <Field
-                label="Learning rate"
-                value={config.learningRate}
-                onChange={(val) => updateConfig("learningRate", val)}
-                step="0.00005"
-              />
-              <Field label="Epochs" value={config.epochs} onChange={(val) => updateConfig("epochs", val)} step="1" />
-              <Field
-                label="Batch size"
-                value={config.batchSize}
-                onChange={(val) => updateConfig("batchSize", val)}
-                step="4"
-              />
-              <Field
-                label="Gradient accumulation"
-                value={config.gradAccum}
-                onChange={(val) => updateConfig("gradAccum", val)}
-                step="1"
-              />
-              <Field
-                label="Warmup ratio"
-                value={config.warmupRatio}
-                onChange={(val) => updateConfig("warmupRatio", val)}
-                step="0.01"
-              />
-              <Field
-                label="Max sequence length"
-                value={config.maxSeqLength}
-                onChange={(val) => updateConfig("maxSeqLength", val)}
-                step="32"
-              />
-              <Field label="LoRA r" value={config.loraR} onChange={(val) => updateConfig("loraR", val)} step="4" />
-              <Field
-                label="LoRA alpha"
-                value={config.loraAlpha}
-                onChange={(val) => updateConfig("loraAlpha", val)}
-                step="4"
-              />
-              <Field
-                label="LoRA dropout"
-                value={config.loraDropout}
-                onChange={(val) => updateConfig("loraDropout", val)}
-                step="0.02"
-              />
-            </div>
-
-            <div className="flex items-center gap-3 pt-2">
-              <button
-                onClick={simulateRun}
-                className="px-4 py-2 rounded-lg font-semibold bg-emerald-600 text-white hover:bg-emerald-700"
-              >
-                Add Planned Run
-              </button>
-              <p className="text-sm text-slate-600 dark:text-gray-300">{status}</p>
-            </div>
+      <main className="container mx-auto px-4 py-10 space-y-8">
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+            {error} — ensure the backend is running at http://localhost:8000.
           </div>
+        )}
 
-          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-slate-200/60 dark:border-gray-800 p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Readiness Checklist</h3>
-              <span className="text-sm font-semibold px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100">
-                {completion}% complete
+        <section className="grid md:grid-cols-3 gap-4">
+          <div className="md:col-span-2 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-slate-200/60 dark:border-gray-800 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Macro Metrics</h2>
+                <p className="text-sm text-slate-600 dark:text-gray-300">
+                  Test split size: {result?.dataset.num_rows ?? "—"} • Runtime:{" "}
+                  {result ? `${result.runtime_seconds}s` : "—"}
+                </p>
+              </div>
+              <span className="text-xs uppercase tracking-wide text-emerald-700 dark:text-emerald-200 bg-emerald-50 dark:bg-emerald-900 px-3 py-1 rounded-full">
+                Held-out test set
               </span>
             </div>
-            <div className="space-y-3">
-              {checklist.map((item) => (
-                <label key={item.id} className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={item.done}
-                    onChange={() => toggleChecklist(item.id)}
-                    className="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                  />
-                  <span className="text-sm text-slate-800 dark:text-gray-200">{item.label}</span>
-                </label>
-              ))}
-            </div>
-            <div className="rounded-lg bg-indigo-50 dark:bg-indigo-900/40 px-4 py-3 text-sm text-indigo-900 dark:text-indigo-100">
-              Tip: swap this checklist for automated preflight checks (dataset hash, adapter params, GPU capacity) once
-              you hook up the backend.
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <MetricCard label="Accuracy" value={result?.metrics.accuracy} />
+              <MetricCard label="Precision (macro)" value={result?.metrics.precision_macro} />
+              <MetricCard label="Recall (macro)" value={result?.metrics.recall_macro} />
+              <MetricCard label="F1 (macro)" value={result?.metrics.f1_macro} accent />
             </div>
           </div>
-        </div>
 
-        <div className="grid lg:grid-cols-3 gap-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-slate-200/60 dark:border-gray-800 p-6 space-y-3">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Test Set Snapshot</h3>
+            <div className="flex items-center justify-between text-sm text-slate-700 dark:text-gray-200">
+              <span>Source</span>
+              <span className="font-semibold">{result?.dataset.source ?? "local"}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm text-slate-700 dark:text-gray-200">
+              <span>Factual</span>
+              <span className="font-semibold">{result?.dataset.class_distribution.factual ?? "—"}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm text-slate-700 dark:text-gray-200">
+              <span>Opinion</span>
+              <span className="font-semibold">{result?.dataset.class_distribution.opinion ?? "—"}</span>
+            </div>
+            {result?.dataset.notes?.length ? (
+              <div className="rounded-lg bg-slate-50 dark:bg-gray-800 px-3 py-2 text-xs text-slate-600 dark:text-gray-300">
+                {result.dataset.notes.join(" ")}
+              </div>
+            ) : null}
+          </div>
+        </section>
+
+        <section className="grid lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-slate-200/60 dark:border-gray-800 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Evaluation Template</h3>
-              <span className="text-xs uppercase tracking-wide text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900 px-3 py-1 rounded-full">
-                Metrics to replace
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Normalized Confusion Matrix</h3>
+              <span className="text-xs text-slate-600 dark:text-gray-300">
+                Percent of true class along rows
               </span>
             </div>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-slate-200 dark:divide-gray-800">
-                <thead className="bg-slate-50 dark:bg-gray-800">
-                  <tr>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-gray-200">Run</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-gray-200">
-                      Accuracy
-                    </th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-gray-200">F1</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-gray-200">Loss</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-gray-200">Notes</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-gray-800">
-                  {metrics.map((row) => (
-                    <tr key={row.label} className="hover:bg-slate-50 dark:hover:bg-gray-800/60">
-                      <td className="px-3 py-2 text-sm font-medium text-slate-900 dark:text-white">{row.label}</td>
-                      <td className="px-3 py-2 text-sm text-slate-800 dark:text-gray-200">{row.accuracy.toFixed(3)}</td>
-                      <td className="px-3 py-2 text-sm text-slate-800 dark:text-gray-200">{row.f1.toFixed(3)}</td>
-                      <td className="px-3 py-2 text-sm text-slate-800 dark:text-gray-200">{row.loss.toFixed(2)}</td>
-                      <td className="px-3 py-2 text-sm text-slate-600 dark:text-gray-300">{row.notes}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-800">
+              {result?.confusion_matrix.image_path ? (
+                <img
+                  src={result.confusion_matrix.image_path}
+                  alt="Assignment 8 confusion matrix"
+                  className="w-full h-auto"
+                />
+              ) : (
+                <ConfusionTable matrix={result?.confusion_matrix.normalized} labels={result?.confusion_matrix.labels} />
+              )}
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-slate-200/60 dark:border-gray-800 p-5">
-              <h4 className="text-lg font-semibold text-slate-900 dark:text-white">Deliverables</h4>
-              <ul className="mt-3 space-y-2 text-sm text-slate-700 dark:text-gray-200">
-                <li>• Notebook or script that launches the updated fine-tune</li>
-                <li>• Eval results vs. baseline with clear metric definitions</li>
-                <li>• Short write-up: what changed, why, and risks observed</li>
-                <li>• Saved adapter weights + configuration for reproducibility</li>
-              </ul>
-            </div>
-            <div className="bg-indigo-600 text-white rounded-xl shadow-lg p-5 space-y-2">
-              <h4 className="text-lg font-semibold">Integration Notes</h4>
-              <p className="text-sm opacity-90">
-                Replace the simulation handlers with calls to your backend endpoint (e.g., `/api/assignment8/train`) once
-                it is available. Mirror the payload shape from this form to keep things consistent.
-              </p>
+          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-slate-200/60 dark:border-gray-800 p-6">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Per-Class Scores</h3>
+            <div className="mt-4 space-y-3">
+              {result?.metrics.per_class.map((item) => (
+                <div
+                  key={item.label_id}
+                  className="rounded-lg border border-slate-200 dark:border-gray-800 px-3 py-2 bg-slate-50 dark:bg-gray-800"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-slate-900 dark:text-white capitalize">{item.label_name}</span>
+                    <span className="text-xs text-slate-600 dark:text-gray-300">support: {item.support}</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm text-slate-700 dark:text-gray-200 mt-2">
+                    <span>P: {formatMetric(item.precision, 2)}</span>
+                    <span>R: {formatMetric(item.recall, 2)}</span>
+                    <span className="font-semibold text-emerald-700 dark:text-emerald-300">
+                      F1: {formatMetric(item.f1, 2)}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+
+        <section className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-slate-200/60 dark:border-gray-800 p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Error Analysis</h3>
+              <p className="text-sm text-slate-600 dark:text-gray-300">
+                Worst-performing class: {worstClass?.label_name ?? "—"} (F1 {formatMetric(worstClass?.f1, 2)})
+              </p>
+            </div>
+            <span className="text-xs uppercase tracking-wide text-indigo-700 dark:text-indigo-200 bg-indigo-50 dark:bg-indigo-900 px-3 py-1 rounded-full">
+              Qualitative review
+            </span>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {result?.error_analysis.examples.length ? (
+              result.error_analysis.examples.map((example, idx) => (
+                <article
+                  key={idx}
+                  className="rounded-lg border border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-800 p-4 space-y-3"
+                >
+                  <div className="flex items-center justify-between text-xs uppercase tracking-wide text-slate-600 dark:text-gray-300">
+                    <span>Misclassified {example.true_label}</span>
+                    <span className="text-emerald-700 dark:text-emerald-300">
+                      → predicted {example.predicted_label} ({formatMetric(example.predicted_score, 2)})
+                    </span>
+                  </div>
+                  <p className="text-slate-900 dark:text-white text-sm leading-relaxed">{example.text}</p>
+                  <p className="text-xs text-slate-600 dark:text-gray-300">{example.reason}</p>
+                </article>
+              ))
+            ) : (
+              <div className="col-span-2 text-sm text-slate-600 dark:text-gray-300">No misclassifications found.</div>
+            )}
+          </div>
+
+          {result?.error_analysis.rationale ? (
+            <div className="rounded-lg bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-100 dark:border-emerald-800 px-4 py-3 text-sm text-emerald-800 dark:text-emerald-100">
+              {result.error_analysis.rationale}
+            </div>
+          ) : null}
+        </section>
+
+        <section className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-slate-200/60 dark:border-gray-800 p-6 space-y-3">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Why macro F1?</h3>
+          <p className="text-sm text-slate-700 dark:text-gray-200">
+            Accuracy alone can overstate performance when one class dominates. Macro-averaged F1 balances precision and
+            recall per class, so the minority label (often &ldquo;opinion&rdquo;) cannot hide behind a strong majority
+            class. It is the primary score reported above.
+          </p>
+        </section>
+      </main>
     </div>
   );
 }
 
-type FieldProps = {
-  label: string;
-  value: number;
-  onChange: (value: number) => void;
-  step?: string;
-};
-
-function Field({ label, value, onChange, step = "0.01" }: FieldProps) {
+function MetricCard({ label, value, accent = false }: { label: string; value?: number; accent?: boolean }) {
   return (
-    <label className="block">
-      <span className="text-sm font-medium text-slate-600 dark:text-gray-300">{label}</span>
-      <input
-        type="number"
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        step={step}
-        className="mt-1 w-full rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2"
-      />
-    </label>
+    <div
+      className={`rounded-xl border px-4 py-3 shadow-sm ${
+        accent
+          ? "bg-emerald-600 text-white border-emerald-500"
+          : "bg-slate-50 dark:bg-gray-800 border-slate-200 dark:border-gray-700 text-slate-900 dark:text-white"
+      }`}
+    >
+      <p className={accent ? "text-xs uppercase tracking-wide text-emerald-100" : "text-xs uppercase tracking-wide text-slate-600 dark:text-gray-300"}>
+        {label}
+      </p>
+      <p className="text-2xl font-bold">{formatMetric(value)}</p>
+    </div>
+  );
+}
+
+function ConfusionTable({ matrix, labels }: { matrix?: number[][]; labels?: string[] }) {
+  if (!matrix || !labels) {
+    return <div className="p-4 text-sm text-slate-600 dark:text-gray-300">No confusion matrix available.</div>;
+  }
+
+  return (
+    <table className="w-full text-sm text-slate-800 dark:text-gray-200">
+      <thead className="bg-slate-100 dark:bg-gray-800">
+        <tr>
+          <th className="px-3 py-2 text-left">True / Pred</th>
+          {labels.map((label) => (
+            <th key={label} className="px-3 py-2 text-left capitalize">
+              {label}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {matrix.map((row, rowIdx) => (
+          <tr key={labels[rowIdx]} className="divide-x divide-slate-200 dark:divide-gray-800">
+            <th className="px-3 py-2 font-medium capitalize bg-slate-50 dark:bg-gray-800">{labels[rowIdx]}</th>
+            {row.map((value, colIdx) => (
+              <td key={colIdx} className="px-3 py-2">
+                {(value * 100).toFixed(1)}%
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }

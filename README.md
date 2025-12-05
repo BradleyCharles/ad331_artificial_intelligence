@@ -88,6 +88,11 @@ Backend will be available at `http://localhost:8000`
 - Linux/Mac: `./start_all.sh`
 - Windows: `start_all.bat`
 
+## Assignment 8: LLM Evaluation
+
+- Run `POST http://localhost:8000/api/assignment8/evaluate` to score the Assignment 7 classifier on the held-out test set, produce accuracy/precision/recall/F1 (macro), and emit a normalized confusion matrix at `public/visualizations/static/assignment8_confusion_matrix.png`.
+- Macro-averaged F1 is the primary metric: it balances precision and recall per class so the minority label cannot hide behind majority-class accuracy. Accuracy alone can look strong even when one class (e.g., subjective statements) is frequently misclassified, so F1 better reflects real quality on imbalanced text data.
+
 ## 📋 Running Analysis Scripts
 
 ### Complete Analysis Pipeline
