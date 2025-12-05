@@ -93,6 +93,19 @@ Backend will be available at `http://localhost:8000`
 - Run `POST http://localhost:8000/api/assignment8/evaluate` to score the Assignment 7 classifier on the held-out test set, produce accuracy/precision/recall/F1 (macro), and emit a normalized confusion matrix at `public/visualizations/static/assignment8_confusion_matrix.png`.
 - Macro-averaged F1 is the primary metric: it balances precision and recall per class so the minority label cannot hide behind majority-class accuracy. Accuracy alone can look strong even when one class (e.g., subjective statements) is frequently misclassified, so F1 better reflects real quality on imbalanced text data.
 
+## 📘 Assignments Overview (Goals + Function)
+
+- **Assignment 1 — Dev Setup & Iris EDA**: Stand up the ML toolkit (NumPy/Pandas/Matplotlib/Seaborn) and explore the iris dataset; compute stats and plot histograms/box/scatter charts to practice basic data profiling.
+- **Assignment 2 — Time to Detection Analysis**: Inspect the security incident dataset, surface correlations, and visualize the regression target/feature relationships in the Next.js dashboard.
+- **Assignment 3 — MNIST Classification**: Train a feedforward neural net on handwritten digits and serve predictions; includes an interactive canvas to draw digits, trigger training, and view accuracy/loss curves from the backend.
+- **Assignment 4 — Large Language Models**: Load TinyLlama via Hugging Face, experiment with temperature/top-p/max-tokens, and compare generations; comes with quick test cases plus an interactive chat panel.
+- **Assignment 5 — Retrieval-Augmented Generation**: Build a lightweight RAG pipeline over a D&D 2024 rules summary; chunk and embed text (MiniLM), retrieve relevant passages, and ground TinyLlama responses with a targeted test suite.
+- **Assignment 6 — Prompt Engineering for Structured Extraction**: Craft/evaluate prompts that pull Name, Price, and Date into strict JSON under paraphrases and noisy inputs; tracks runs, compliance, and optimized prompt variants.
+- **Assignment 7 — PEFT (LoRA) News Classifier**: Fine-tune `roberta-base` with LoRA adapters to label news as factual vs opinion while keeping the base model frozen; includes dataset loading, training controls, and metric visualizations.
+- **Assignment 8 — Model Evaluation**: Score the Assignment 7 classifier on a held-out split with macro metrics and a confusion matrix; backend endpoint exports the plot to `public/visualizations/static/assignment8_confusion_matrix.png`.
+- **Assignment 9 — Placeholder**: Slot reserved for the next module; UI stub points learners to check the assignments folder as new materials land.
+- **Assignment 10 — Final Project**: Placeholder for the capstone that will synthesize course concepts into a single end-to-end AI project.
+
 ## 📋 Running Analysis Scripts
 
 ### Complete Analysis Pipeline
